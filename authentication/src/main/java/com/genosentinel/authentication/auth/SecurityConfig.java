@@ -52,11 +52,19 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Aplica la configuración CORS definida abajo
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)) // No se usan sesiones, cada petición se valida por sí sola
                 .authorizeHttpRequests(auth -> auth
-                        // Permite el acceso sin autenticación a los endpoints de login y registro
-                        .requestMatchers("/login", "/register").permitAll()
-                        // El resto de endpoints requieren autenticación
+                        .requestMatchers(
+                                // Le da permisos de acceder a los endpoints a los usuarios con credenciales
+                                // creadas o permite acceder libremente a Swagger UI y a los endpoints
+                                // de documentación. De resto, a nadie más
+                                "login",
+                                "register",
+                                "/v3/api-docs/**",
+                                "/swagger-ui/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
                         .anyRequest().authenticated()
                 )
+
                 // Usa el proveedor de autenticación definido abajo
                 .authenticationProvider(authenticationProvider())
                 // Agrega el filtro JWT antes del filtro estándar de usuario/contraseña
