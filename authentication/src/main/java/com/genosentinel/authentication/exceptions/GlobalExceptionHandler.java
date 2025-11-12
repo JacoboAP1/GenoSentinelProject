@@ -24,4 +24,34 @@ public class GlobalExceptionHandler {
                 ));
     }
 
+    @ExceptionHandler(UsernameAlreadyExistsException.class)
+    public ResponseEntity<Map<String, Object>> handleExistingUser(UsernameAlreadyExistsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(Map.of(
+                        "error", "Username already exists",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(MissingFillFieldsException.class)
+    public ResponseEntity<Map<String, Object>> handleMissingFields(MissingFillFieldsException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of(
+                        "error", "Username or password or email empty",
+                        "message", ex.getMessage()
+                ));
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleUserNotFound(UserNotFoundException ex) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(Map.of(
+                        "error", "Not user found with that username",
+                        "message", ex.getMessage()
+                ));
+    }
+
 }
