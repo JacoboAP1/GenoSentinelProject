@@ -2,9 +2,9 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsString, IsNotEmpty, IsDateString, IsOptional, IsIn } from 'class-validator';
 
 /**
- * DTO para crear un paciente
+ * DTO IN para crear un paciente
  */
-export class CreatePatientDto {
+export class CreatePatientDtoIn {
     @ApiProperty({ example: 'María', description: 'Nombre del paciente' })
     @IsString()
     @IsNotEmpty({ message: 'El nombre es obligatorio' })
@@ -34,9 +34,9 @@ export class CreatePatientDto {
 }
 
 /**
- * DTO para actualizar un paciente
+ * DTO IN para actualizar un paciente
  */
-export class UpdatePatientDto {
+export class UpdatePatientDtoIn {
     @ApiProperty({ example: 'María Isabel', description: 'Nombre del paciente', required: false })
     @IsString()
     @IsOptional()
@@ -63,39 +63,4 @@ export class UpdatePatientDto {
     @IsIn(['Activo', 'Seguimiento', 'Inactivo'], { message: 'Estado no válido' })
     @IsOptional()
     status?: string;
-}
-
-/**
- * DTO de respuesta para paciente
- */
-export class PatientResponseDto {
-    @ApiProperty({ example: 'uuid-123-456', description: 'ID único del paciente' })
-    id: string;
-
-    @ApiProperty({ example: 'María', description: 'Nombre del paciente' })
-    firstName: string;
-
-    @ApiProperty({ example: 'González', description: 'Apellido del paciente' })
-    lastName: string;
-
-    @ApiProperty({ example: '1985-03-15', description: 'Fecha de nacimiento' })
-    birthDate: Date;
-
-    @ApiProperty({ example: 'Femenino', description: 'Género del paciente' })
-    gender: string;
-
-    @ApiProperty({ example: 'Activo', description: 'Estado del paciente' })
-    status: string;
-
-    @ApiProperty({ example: 'María González', description: 'Nombre completo' })
-    fullName: string;
-
-    @ApiProperty({ example: 39, description: 'Edad calculada' })
-    age: number;
-
-    @ApiProperty({ example: '2024-11-13', description: 'Fecha de creación' })
-    createdAt: Date;
-
-    @ApiProperty({ example: '2024-11-13', description: 'Fecha de actualización' })
-    updatedAt: Date;
 }
