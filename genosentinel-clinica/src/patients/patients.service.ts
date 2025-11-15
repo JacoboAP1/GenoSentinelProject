@@ -2,7 +2,8 @@ import { Injectable, NotFoundException, BadRequestException } from '@nestjs/comm
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Patient } from './patient.entity';
-import { CreatePatientDto, UpdatePatientDto, PatientResponseDto } from './dto/patient.dto';
+import { CreatePatientDtoIn, UpdatePatientDtoIn } from './dto/patient-in.dto';
+import { PatientDtoOut } from './dto/patient-out.dto';
 
 /**
  * Servicio para la gestión de pacientes oncológicos
@@ -17,7 +18,7 @@ export class PatientsService {
     /**
      * Crea un nuevo paciente
      */
-    async create(createPatientDto: CreatePatientDto): Promise<PatientResponseDto> {
+    async create(createPatientDto: CreatePatientDtoIn): Promise<PatientDtoOut> {
         // Validar fecha de nacimiento
         const birthDate = new Date(createPatientDto.birthDate);
         if (birthDate > new Date()) {
@@ -37,7 +38,7 @@ export class PatientsService {
     /**
      * Obtiene todos los pacientes
      */
-    async findAll(): Promise<PatientResponseDto[]> {
+    async findAll(): Promise<PatientDtoOut[]> {
         const patients = await this.patientRepository.find();
         return patients.map((patient) => this.mapToResponse(patient));
     }
@@ -45,7 +46,7 @@ export class PatientsService {
     /**
      * Obtiene un paciente por ID
      */
-    async findOne(id: string): Promise<PatientResponseDto> {
+    async findOne(id: string): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -56,7 +57,7 @@ export class PatientsService {
     /**
      * Obtiene pacientes por estado
      */
-    async findByStatus(status: string): Promise<PatientResponseDto[]> {
+    async findByStatus(status: string): Promise<PatientDtoOut[]> {
         const patients = await this.patientRepository.find({ where: { status } });
         return patients.map((patient) => this.mapToResponse(patient));
     }
@@ -64,7 +65,7 @@ export class PatientsService {
     /**
      * Busca pacientes por nombre o apellido
      */
-    async searchByName(name: string): Promise<PatientResponseDto[]> {
+    async searchByName(name: string): Promise<PatientDtoOut[]> {
         const patients = await this.patientRepository
             .createQueryBuilder('patient')
             .where('patient.firstName LIKE :name', { name: `%${name}%` })
@@ -77,7 +78,7 @@ export class PatientsService {
     /**
      * Actualiza un paciente
      */
-    async update(id: string, updatePatientDto: UpdatePatientDto): Promise<PatientResponseDto> {
+    async update(id: string, updatePatientDto: UpdatePatientDtoIn): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -100,7 +101,7 @@ export class PatientsService {
     /**
      * Desactiva un paciente (cambia estado a Inactivo)
      */
-    async deactivate(id: string): Promise<PatientResponseDto> {
+    async deactivate(id: string): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -124,7 +125,7 @@ export class PatientsService {
     /**
      * Mapea entidad a DTO de respuesta
      */
-    private mapToResponse(patient: Patient): PatientResponseDto {
+    private mapToResponse(patient: Patient): PatientDtoOut {
         const birthDate = new Date(patient.birthDate);
         const today = new Date();
         const age = today.getFullYear() - birthDate.getFullYear() -

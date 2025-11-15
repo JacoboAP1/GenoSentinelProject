@@ -2,7 +2,8 @@ import { Injectable, NotFoundException, ConflictException } from '@nestjs/common
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { TumorType } from './tumor-type.entity';
-import { CreateTumorTypeDto, UpdateTumorTypeDto, TumorTypeResponseDto } from './dto/tumor-type.dto';
+import { CreateTumorTypeDto, UpdateTumorTypeDto } from './dto/tumor-type-in.dto';
+import { TumorTypeDtoOut } from './dto/tumor-type-out.dto';
 
 /**
  * Servicio para la gestión del catálogo de tipos de tumor
@@ -17,7 +18,7 @@ export class TumorTypesService {
     /**
      * Crea un nuevo tipo de tumor
      */
-    async create(createTumorTypeDto: CreateTumorTypeDto): Promise<TumorTypeResponseDto> {
+    async create(createTumorTypeDto: CreateTumorTypeDto): Promise<TumorTypeDtoOut> {
         // Verificar si ya existe un tumor con el mismo nombre
         const existing = await this.tumorTypeRepository.findOne({
             where: { name: createTumorTypeDto.name },
@@ -35,7 +36,7 @@ export class TumorTypesService {
     /**
      * Obtiene todos los tipos de tumor
      */
-    async findAll(): Promise<TumorTypeResponseDto[]> {
+    async findAll(): Promise<TumorTypeDtoOut[]> {
         const tumorTypes = await this.tumorTypeRepository.find();
         return tumorTypes.map((type) => this.mapToResponse(type));
     }
@@ -43,7 +44,7 @@ export class TumorTypesService {
     /**
      * Obtiene un tipo de tumor por ID
      */
-    async findOne(id: number): Promise<TumorTypeResponseDto> {
+    async findOne(id: number): Promise<TumorTypeDtoOut> {
         const tumorType = await this.tumorTypeRepository.findOne({ where: { id } });
         if (!tumorType) {
             throw new NotFoundException(`Tipo de tumor con ID ${id} no encontrado`);
@@ -54,7 +55,7 @@ export class TumorTypesService {
     /**
      * Busca tipos de tumor por sistema afectado
      */
-    async searchBySystem(system: string): Promise<TumorTypeResponseDto[]> {
+    async searchBySystem(system: string): Promise<TumorTypeDtoOut[]> {
         const tumorTypes = await this.tumorTypeRepository
             .createQueryBuilder('tumorType')
             .where('tumorType.systemAffected LIKE :system', { system: `%${system}%` })
@@ -66,7 +67,7 @@ export class TumorTypesService {
     /**
      * Actualiza un tipo de tumor
      */
-    async update(id: number, updateTumorTypeDto: UpdateTumorTypeDto): Promise<TumorTypeResponseDto> {
+    async update(id: number, updateTumorTypeDto: UpdateTumorTypeDto): Promise<TumorTypeDtoOut> {
         const tumorType = await this.tumorTypeRepository.findOne({ where: { id } });
         if (!tumorType) {
             throw new NotFoundException(`Tipo de tumor con ID ${id} no encontrado`);
@@ -100,7 +101,7 @@ export class TumorTypesService {
     /**
      * Mapea entidad a DTO de respuesta
      */
-    private mapToResponse(tumorType: TumorType): TumorTypeResponseDto {
+    private mapToResponse(tumorType: TumorType): TumorTypeDtoOut {
         return {
             id: tumorType.id,
             name: tumorType.name,

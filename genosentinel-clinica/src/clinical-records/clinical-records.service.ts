@@ -4,7 +4,8 @@ import { Repository } from 'typeorm';
 import { ClinicalRecord } from './clinical-record.entity';
 import { Patient } from '../patients/patient.entity';
 import { TumorType } from '../tumor-types/tumor-type.entity';
-import { CreateClinicalRecordDto, UpdateClinicalRecordDto, ClinicalRecordResponseDto } from './dto/clinical-record.dto';
+import { CreateClinicalRecordDtoIn, UpdateClinicalRecordDtoIn } from './dto/clinical-record-in.dto';
+import { ClinicalRecordDtoOut } from './dto/clinical-record-out.dto';
 import { PatientsService } from '../patients/patients.service';
 import { TumorTypesService } from '../tumor-types/tumor-types.service';
 
@@ -27,7 +28,7 @@ export class ClinicalRecordsService {
     /**
      * Crea una nueva historia clínica
      */
-    async create(createDto: CreateClinicalRecordDto): Promise<ClinicalRecordResponseDto> {
+    async create(createDto: CreateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
         // Validar fecha de diagnóstico
         const diagnosisDate = new Date(createDto.diagnosisDate);
         if (diagnosisDate > new Date()) {
@@ -66,7 +67,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene todas las historias clínicas
      */
-    async findAll(): Promise<ClinicalRecordResponseDto[]> {
+    async findAll(): Promise<ClinicalRecordDtoOut[]> {
         const records = await this.clinicalRecordRepository.find({
             relations: ['patient', 'tumorType'],
         });
@@ -76,7 +77,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene una historia clínica por ID
      */
-    async findOne(id: string): Promise<ClinicalRecordResponseDto> {
+    async findOne(id: string): Promise<ClinicalRecordDtoOut> {
         const record = await this.clinicalRecordRepository.findOne({
             where: { id },
             relations: ['patient', 'tumorType'],
@@ -92,7 +93,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene historias clínicas por paciente
      */
-    async findByPatient(patientId: string): Promise<ClinicalRecordResponseDto[]> {
+    async findByPatient(patientId: string): Promise<ClinicalRecordDtoOut[]> {
         const records = await this.clinicalRecordRepository.find({
             where: { patient: { id: patientId } },
             relations: ['patient', 'tumorType'],
@@ -104,7 +105,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene historias clínicas por tipo de tumor
      */
-    async findByTumorType(tumorTypeId: number): Promise<ClinicalRecordResponseDto[]> {
+    async findByTumorType(tumorTypeId: number): Promise<ClinicalRecordDtoOut[]> {
         const records = await this.clinicalRecordRepository.find({
             where: { tumorType: { id: tumorTypeId } },
             relations: ['patient', 'tumorType'],
@@ -116,7 +117,7 @@ export class ClinicalRecordsService {
     /**
      * Actualiza una historia clínica
      */
-    async update(id: string, updateDto: UpdateClinicalRecordDto): Promise<ClinicalRecordResponseDto> {
+    async update(id: string, updateDto: UpdateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
         const record = await this.clinicalRecordRepository.findOne({
             where: { id },
             relations: ['patient', 'tumorType'],
@@ -179,7 +180,7 @@ export class ClinicalRecordsService {
     /**
      * Mapea entidad a DTO de respuesta
      */
-    private async mapToResponse(record: ClinicalRecord): Promise<ClinicalRecordResponseDto> {
+    private async mapToResponse(record: ClinicalRecord): Promise<ClinicalRecordDtoOut> {
         const patient = await this.patientsService.findOne(record.patient.id);
         const tumorType = await this.tumorTypesService.findOne(record.tumorType.id);
 
