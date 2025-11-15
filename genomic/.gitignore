@@ -1,0 +1,83 @@
+# Archivos de base de datos SQLite
+db.sqlite3
+*.sqlite3
+
+# Archivos de migraciones compilados
+**/migrations/**/*.pyc
+**/migrations/**/__pycache__/
+**/migrations/**/.__*
+**/migrations/**/.*.swp
+
+# Evitar subir la carpeta de migraciones iniciales (si todavía no hay CRUD)
+*/migrations/
+!*/migrations/__init__.py   # Pero sí permitir este archivo
+
+# ============================
+# Python
+# ============================
+
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+*.pyc
+
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+parts/
+var/
+sdist/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+
+# ============================
+# Entorno virtual
+# ============================
+
+venv/
+ENV/
+env/
+.venv/
+
+# ============================
+# Logs
+# ============================
+
+*.log
+
+# ============================
+# Archivos de configuración sensibles
+# ============================
+
+.env
+.env.*
+
+# ============================
+# IDEs / Editores
+# ============================
+
+# PyCharm / IntelliJ
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+
+# ============================
+# Sistema operativo
+# ============================
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
