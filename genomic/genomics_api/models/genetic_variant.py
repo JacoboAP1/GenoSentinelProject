@@ -9,5 +9,6 @@ class GeneticVariant(models.Model):
     alternate_base = models.CharField(max_length=1)
     impact = models.CharField(max_length=20, blank=True, null=True)
 
-    def __str__(self):
-        return f"{self.gene.symbol} {self.reference_base}>{self.alternate_base} ({self.chromosome}:{self.position})"
+    class Meta:
+        managed = False
+        db_table = 'geneticvariant'
