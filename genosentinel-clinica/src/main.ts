@@ -33,9 +33,9 @@ async function bootstrap() {
         .addTag('Tipos de Tumor', 'Endpoints para la gestión del catálogo de tumores oncológicos')
         .addTag('Historias Clínicas', 'Endpoints para la gestión de diagnósticos y tratamientos oncológicos')
         .setContact(
-            'Breaze Labs - Equipo de Desarrollo',
+            'Jacobo y Santiago - Equipo de Desarrollo',
             '',
-            'soporte@breaze-labs.com',
+            'jacobo.arroyavep@autonoma.edu.co',
         )
         .setLicense('Apache 2.0', 'https://www.apache.org/licenses/LICENSE-2.0.html')
         .addServer('http://localhost:3000/genosentinel/clinica', 'Servidor local de desarrollo')
