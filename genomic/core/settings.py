@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Django REST Framework
+    # Django REST Framework para usar el ORM
     'rest_framework',
 
     # Microservicio

@@ -1,5 +1,5 @@
 from django.db import models
-from .gene import Gene
+from genomics_api.models.entities.Gene import Gene
 
 class GeneticVariant(models.Model):
     gene = models.ForeignKey(Gene, on_delete=models.CASCADE, related_name='variants')
