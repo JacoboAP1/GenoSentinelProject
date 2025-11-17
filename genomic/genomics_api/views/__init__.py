@@ -1,3 +1,3 @@
-from .gene_view import GeneViewSet
-from .genetic_variant_view import GeneticVariantViewSet
-from .patient_variant_report_view import PatientVariantReportViewSet
+from .GeneView import GeneViewSet
+from .GeneticVariantView import GeneticVariantViewSet
+from .PatientVariantReportView import PatientVariantReportViewSet

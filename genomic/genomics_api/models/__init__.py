@@ -1,3 +1,3 @@
-from .gene import Gene
-from .genetic_variant import GeneticVariant
-from .patient_variant_report import PatientVariantReport
+from genomics_api.models.entities.Gene import Gene
+from genomics_api.models.entities.GeneticVariant import GeneticVariant
+from genomics_api.models.entities.PatientVariantReport import PatientVariantReport

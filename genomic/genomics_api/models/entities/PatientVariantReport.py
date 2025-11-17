@@ -1,5 +1,5 @@
 from django.db import models
-from .genetic_variant import GeneticVariant
+from genomics_api.models.entities.GeneticVariant import GeneticVariant
 
 class PatientVariantReport(models.Model):
     patient_id = models.IntegerField() # Viene del microservicio de clínica
