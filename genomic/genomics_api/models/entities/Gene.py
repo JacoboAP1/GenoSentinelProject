@@ -5,8 +5,6 @@ class Gene(models.Model):
     full_name = models.CharField(max_length=150, blank=True, null=True)
     function_summary = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return self.symbol
     class Meta:
         managed = False # No se migran las tablas en la base de datos, se usan las existentes
         db_table = 'gene'
