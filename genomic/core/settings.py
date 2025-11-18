@@ -43,6 +43,9 @@ INSTALLED_APPS = [
 
     # Microservicio
     'genomics_api',
+
+    # Para agregar documentación con Swagger
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
