@@ -1,5 +1,4 @@
 from rest_framework import serializers
-
 from genomics_api.models.entities.GeneticVariant import GeneticVariant
 
 class GeneticVariantSerializer(serializers.ModelSerializer):
