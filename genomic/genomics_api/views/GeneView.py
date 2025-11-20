@@ -17,7 +17,8 @@ class GeneViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Obtener toda la lista de genes o por su ID",
         operation_description="Retorna la información asociada de todos los genes o solo el gen especificado",
-        responses={200: GeneSerializer()}
+        responses={200: GeneSerializer(),
+                   404: GeneSerializer()}
     )
     def get_queryset(self):
         return GeneService.list_genes()
@@ -25,7 +26,8 @@ class GeneViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Crear un gen",
         operation_description="Retorna la info con la que se creó el gen",
-        responses={200: GeneSerializer()}
+        responses={200: GeneSerializer(),
+                   400: GeneSerializer()}
     )
     def perform_create(self, serializer):
         GeneService.create_gene(serializer.validated_data)
@@ -33,7 +35,8 @@ class GeneViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Actualizar un gen",
         operation_description="Retorna la información que se cambió",
-        responses={200: GeneSerializer()}
+        responses={200: GeneSerializer(),
+                   400: GeneSerializer()}
     )
     def perform_update(self, serializer):
         GeneService.update_gene(self.get_object(), serializer.validated_data)
@@ -41,7 +44,8 @@ class GeneViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Eliminar un gen por su ID",
         operation_description="Retorna el gen eliminado",
-        responses={200: GeneSerializer()}
+        responses={200: GeneSerializer(),
+                   404: GeneSerializer()}
     )
     def perform_destroy(self, instance):
         GeneService.delete_gene(instance)
