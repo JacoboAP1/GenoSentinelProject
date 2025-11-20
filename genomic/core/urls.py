@@ -7,8 +7,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # microservicio genómico
-    path('genomics/', include('genomics_api.urls')),
+    path('genomic/', include('genomics_api.urls')),
 
     # Swagger UI
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui')
+    path('genomic/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui')
 ]

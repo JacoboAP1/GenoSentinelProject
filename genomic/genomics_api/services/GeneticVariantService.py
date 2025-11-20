@@ -16,14 +16,8 @@ class VariantService:
     def create_variant(data):
         required_fields = ["gene", "chromosome", "position", "reference_base",
                            "alternate_base", "impact"]
-        IMPACT_VALUES = [
-            "Missense",
-            "Frameshift",
-            "Nonsense",
-            "Silent",
-            "Splice",
-            "Other"
-        ]
+        IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
+            "Splice", "Other"]
 
         for field in required_fields:
             value = data.get(field)
@@ -49,14 +43,8 @@ class VariantService:
         required_fields = ["gene", "chromosome", "position", "reference_base",
                            "alternate_base", "impact"]
 
-        IMPACT_VALUES = [
-            "Missense",
-            "Frameshift",
-            "Nonsense",
-            "Silent",
-            "Splice",
-            "Other"
-        ]
+        IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
+                         "Splice", "Other"]
 
         for field in required_fields:
             value = validated_data.get(field)

@@ -17,7 +17,8 @@ class GeneticVariantViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Obtener toda la lista de variantes genéticas o por ID",
         operation_description="Retorna la información asociada de todas las variantes o solo la especificada",
-        responses={200: GeneticVariantSerializer()}
+        responses={200: GeneticVariantSerializer(),
+                   404: GeneticVariantSerializer()}
     )
     def get_queryset(self):
         return VariantService.list_variants()
@@ -25,7 +26,9 @@ class GeneticVariantViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Crear una varinte genética",
         operation_description="Crea una variante genética asociándolo a un gen",
-        responses={200: GeneticVariantSerializer()}
+        responses={200: GeneticVariantSerializer(),
+                   400: GeneticVariantSerializer(),
+                   206: GeneticVariantSerializer()}
     )
     def perform_create(self, serializer):
         VariantService.create_variant(serializer.validated_data)
@@ -33,7 +36,9 @@ class GeneticVariantViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Actualizar una variante",
         operation_description="Retorna la información que se cambió",
-        responses={200: GeneticVariantSerializer()}
+        responses={200: GeneticVariantSerializer(),
+                   400: GeneticVariantSerializer(),
+                   206: GeneticVariantSerializer()}
     )
     def perform_update(self, serializer):
         VariantService.update_variant(self.get_object(), serializer.validated_data)
@@ -41,7 +46,8 @@ class GeneticVariantViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(
         operation_summary="Eliminar una variante por ID",
         operation_description="Retorna la variante eliminada",
-        responses={200: GeneticVariantSerializer()}
+        responses={200: GeneticVariantSerializer(),
+                   404: GeneticVariantSerializer()}
     )
     def perform_destroy(self, instance):
         VariantService.delete_variant(instance)
