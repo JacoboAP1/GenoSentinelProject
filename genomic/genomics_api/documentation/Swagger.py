@@ -8,7 +8,7 @@ schema_view = get_schema_view(
         default_version='v1',
         description="Microservicio para análisis y procesamiento de datos genómicos",
         terms_of_service="https://example.com/terms/",
-        contact=openapi.Contact(email="contact@genosentinel.com"),
+        contact=openapi.Contact(email="jacobo.arroyavep@autonoma.edu.co y Santiago Rubio"),
         license=openapi.License(name="MIT License"),
     ),
     public=True,

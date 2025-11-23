@@ -1,86 +1,112 @@
-import requests
+from genomics_api.models.dtos.ReportsDtos.ReportsInDTO import ReportsInDTO
+from genomics_api.models.dtos.ReportsDtos.ReportsOutDTO import ReportsOutDTO
 from genomics_api.models.entities.PatientVariantReport import PatientVariantReport
 from genomics_api.exceptions.FieldNotFilledException import FieldNotFilledException
-
-CLINIC_MS_URL = "http://localhost:3000/patients/"
 
 class ReportService:
 
     @staticmethod
     def list_reports():
         reports = PatientVariantReport.objects.all()
-        enriched = []
+        response = []
 
         for r in reports:
-            # Llamado al microservicio
-            patient_response = requests.get(f"{CLINIC_MS_URL}{r.patient_id}")
-            patient_id = None
+            dto = ReportsOutDTO(
+                patient_id= r.patient_id,
+                variant_id= r.variant_id,
+                detection_date= r.detection_date
+            )
+            response.append(dto.to_dict())
 
-            if patient_response.status_code == 200:
-                patient_json = patient_response.json()
-                patient_id = patient_json.get("id")
-
-            enriched.append({
-                "id": r.id,
-                "patient_id": patient_id,    
-                "variant_id": r.variant_id,
-                "detection_date": r.detection_date,
-                "allele_frequency": r.allele_frequency
-            })
-
-        return enriched
+        return response
 
     @staticmethod
     def get_report(id):
-        return PatientVariantReport.objects.get(pk=id)
+        r = PatientVariantReport.objects.get(pk=id)
+
+        dto = ReportsOutDTO(
+            patient_id= r.patient_id,
+            variant_id= r.variant_id,
+            detection_date= r.detection_date
+        )
+
+        return dto.to_dict()
 
     @staticmethod
     def create_report(data):
-        fields = [
-            'patient_id',
-            'variant',
-            'detection_date',
-            'allele_frequency',
-        ]
+        inDto = ReportsInDTO (
+            patient_id= data.get("patient_id"),
+            variant_id= data.get("variant_id"),
+            detection_date= data.get("detection_date"),
+            allele_frequency= data.get("allele_frequency")
+        )
+
+        fields = [inDto.patient_id, inDto.variant_id, inDto.detection_date, inDto.allele_frequency]
 
         for field in fields:
-            value = data.get(field)
 
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not value:
+            if not field:
                 raise FieldNotFilledException(f"{field} is required")
 
             # Si es string, valida el vacío
-            if isinstance(value, str) and value.strip() == "":
+            if isinstance(field, str) and field.strip() == "":
                 raise FieldNotFilledException(f"{field} cannot be blank")
 
-        return PatientVariantReport.objects.create(**data)
+        report = PatientVariantReport.objects.create(
+            patient_id = inDto.patient_id,
+            variant_id = inDto.variant_id,
+            detection_date = inDto.detection_date,
+            allele_frequency = inDto.allele_frequency
+        )
+
+        outDto = ReportsOutDTO(
+            patient_id= report.patient_id,
+            variant_id= report.variant_id,
+            detection_date= report.detection_date
+        )
+
+        return outDto.to_dict()
 
     @staticmethod
-    def update_report(instance, validated_data):
-        fields = [
-            'patient_id',
-            'variant',
-            'detection_date',
-            'allele_frequency',
-        ]
+    def update_report(instance, data):
+        inDto = ReportsInDTO (
+            patient_id= data.get("patient_id"),
+            variant_id= data.get("variant_id"),
+            detection_date= data.get("detection_date"),
+            allele_frequency= data.get("allele_frequency")
+        )
+
+        fields = [inDto.patient_id, inDto.variant_id, inDto.detection_date, inDto.allele_frequency]
 
         for field in fields:
-            value = validated_data.get(field)
 
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not value:
+            if not field:
                 raise FieldNotFilledException(f"{field} is required")
 
             # Si es string, valida el vacío
-            if isinstance(value, str) and value.strip() == "":
+            if isinstance(field, str) and field.strip() == "":
                 raise FieldNotFilledException(f"{field} cannot be blank")
 
-        for attr, value in validated_data.items():
-            setattr(instance, attr, value)
+        instance.patient_id = inDto.patient_id
+        instance.variant_id = inDto.variant_id
+        instance.detection_date = inDto.detection_date
+        instance.allele_frequency = inDto.allele_frequency
+
         instance.save()
-        return instance
+
+        outDto = ReportsOutDTO (
+            patient_id=instance.patient_id,
+            variant_id=instance.variant_id,
+            detection_date=instance.detection_date
+        )
+
+        return outDto.to_dict()
 
     @staticmethod
     def delete_report(instance):
         instance.delete()
+        return {
+            "message": "Report deleted successfully"
+        }
