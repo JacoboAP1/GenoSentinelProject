@@ -1,10 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from genomics_api.models.serializers.GeneSerializer import GeneSerializer
 from genomics_api.services import GeneService
 from genomics_api.models.entities.Gene import Gene
 from drf_yasg.utils import swagger_auto_schema
 
 class GeneViewSet(viewsets.ModelViewSet):
+    serializer_class = GeneSerializer
     # Importante:
     # El router necesita que exista un atributo "queryset"
     # Aunque este queryset no se usa realmente porque sobrescribimos todos los métodos del ViewSet

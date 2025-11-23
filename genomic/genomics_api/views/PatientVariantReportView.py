@@ -1,10 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.response import Response
+from genomics_api.models.serializers.ReportSerializer import ReportSerializer
 from genomics_api.services.PatientVariantReportService import ReportService
 from genomics_api.models.entities.PatientVariantReport import PatientVariantReport
 from drf_yasg.utils import swagger_auto_schema
 
 class PatientVariantReportViewSet(viewsets.ModelViewSet):
+    serializer_class = ReportSerializer
     # Importante:
     # El router necesita que exista un atributo "queryset"
     # Aunque este queryset no se usa realmente porque sobrescribimos todos los métodos del ViewSet
