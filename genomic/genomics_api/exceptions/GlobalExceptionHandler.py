@@ -13,7 +13,7 @@ def custom_exception_handler(exc, context):
     # Primero se deja que DRF maneje sus propias excepciones
     response = exception_handler(exc, context)
 
-    # Si es una de las excepciones personalizadas:
+    # Si es una de las excepciones personalizadas
     if isinstance(exc, FieldNotFilledException):
         return Response(
             {"success": False, "error": "Some field not filled", "message": str(exc)},
