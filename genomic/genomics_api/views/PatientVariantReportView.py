@@ -27,6 +27,7 @@ class PatientVariantReportViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         operation_summary="Obtener una reporte de paciente por ID",
+        operation_description="Retorna la información asociada del reporte especificado",
         responses={200: "Success",
                    404: "Not found"}
     )

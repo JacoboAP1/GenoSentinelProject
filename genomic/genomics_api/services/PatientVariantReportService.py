@@ -1,7 +1,9 @@
+from genomics_api.exceptions.PatientNotFoundException import PatientNotFoundException
 from genomics_api.models.dtos.ReportsDtos.ReportsInDTO import ReportsInDTO
 from genomics_api.models.dtos.ReportsDtos.ReportsOutDTO import ReportsOutDTO
 from genomics_api.models.entities.PatientVariantReport import PatientVariantReport
 from genomics_api.exceptions.FieldNotFilledException import FieldNotFilledException
+from genomics_api.gateway.ClinicServiceClient import ClinicServiceClient
 
 class ReportService:
 
@@ -41,17 +43,27 @@ class ReportService:
             allele_frequency= data.get("allele_frequency")
         )
 
-        fields = [inDto.patient_id, inDto.variant_id, inDto.detection_date, inDto.allele_frequency]
+        client = ClinicServiceClient.get_patient_by_id(inDto.patient_id)
 
-        for field in fields:
+        if not client:
+            raise PatientNotFoundException("Enter an existing ID")
 
+        fields = {
+            "patient_id": inDto.patient_id,
+            "variant_id": inDto.variant_id,
+            "detection_date": inDto.detection_date,
+            "allele_frequency": inDto.allele_frequency,
+        }
+
+        # Ciclo que verifica que cada atributo no sea nulo y que no esté vacío
+        for name, value in fields.items():
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not field:
-                raise FieldNotFilledException(f"{field} is required")
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
             # Si es string, valida el vacío
-            if isinstance(field, str) and field.strip() == "":
-                raise FieldNotFilledException(f"{field} cannot be blank")
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
 
         report = PatientVariantReport.objects.create(
             patient_id = inDto.patient_id,
@@ -77,17 +89,27 @@ class ReportService:
             allele_frequency= data.get("allele_frequency")
         )
 
-        fields = [inDto.patient_id, inDto.variant_id, inDto.detection_date, inDto.allele_frequency]
+        client = ClinicServiceClient.get_patient_by_id(inDto.patient_id)
 
-        for field in fields:
+        if not client:
+            raise PatientNotFoundException("Enter an existing ID")
 
+        fields = {
+            "patient_id": inDto.patient_id,
+            "variant_id": inDto.variant_id,
+            "detection_date": inDto.detection_date,
+            "allele_frequency": inDto.allele_frequency,
+        }
+
+        # Ciclo que verifica que cada atributo no sea nulo y que no esté vacío
+        for name, value in fields.items():
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not field:
-                raise FieldNotFilledException(f"{field} is required")
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
             # Si es string, valida el vacío
-            if isinstance(field, str) and field.strip() == "":
-                raise FieldNotFilledException(f"{field} cannot be blank")
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
 
         instance.patient_id = inDto.patient_id
         instance.variant_id = inDto.variant_id

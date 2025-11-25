@@ -8,6 +8,7 @@ from genomics_api.exceptions.FieldNotFilledException import (
 from genomics_api.exceptions.GeneticVariantExceptions import (
     InvalidImpactValueException,
 )
+from genomics_api.exceptions.PatientNotFoundException import PatientNotFoundException
 
 def custom_exception_handler(exc, context):
     # Primero se deja que DRF maneje sus propias excepciones
@@ -24,6 +25,12 @@ def custom_exception_handler(exc, context):
         return Response(
             {"success": False, "error": "Invalid impact value", "message": str(exc)},
             status=status.HTTP_206_PARTIAL_CONTENT
+        )
+
+    if isinstance(exc, PatientNotFoundException):
+        return Response(
+            {"success": False, "error": "Patient ID does not exist", "message": str(exc)},
+            status=status.HTTP_404_NOT_FOUND
         )
 
     # Si ninguna coincidió pero DRF devolvió una respuesta por defecto

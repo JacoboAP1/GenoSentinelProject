@@ -29,6 +29,7 @@ class GeneticVariantViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         operation_summary="Obtener una variante por su ID",
+        operation_description="Retorna la información asociada de la variante especificada",
         responses={200: "Success",
                    404: "Not found"}
     )

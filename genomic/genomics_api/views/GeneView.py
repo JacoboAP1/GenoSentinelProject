@@ -29,6 +29,7 @@ class GeneViewSet(viewsets.ModelViewSet):
 
     @swagger_auto_schema(
         operation_summary="Obtener un gen por ID",
+        operation_description="Retorna la información asociada del gen especificado",
         responses={200: "Success",
                    404: "Not found"}
     )
