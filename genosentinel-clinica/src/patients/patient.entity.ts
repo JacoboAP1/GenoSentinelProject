@@ -1,34 +1,28 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { ClinicalRecord } from '../clinical-records/clinical-record.entity';
 
 /**
  * Entidad que representa un paciente oncológico
  */
-@Entity('patients')
+@Entity('Patient')
 export class Patient {
-    @PrimaryGeneratedColumn('uuid')
-    id: string;
+    @PrimaryGeneratedColumn('increment')
+    id: number;
 
-    @Column({ type: 'varchar', length: 100, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: false, name: 'first_name' })
     firstName: string;
 
-    @Column({ type: 'varchar', length: 100, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: false, name: 'last_name' })
     lastName: string;
 
-    @Column({ type: 'date', nullable: false })
+    @Column({ type: 'date', nullable: false, name: 'birth_date' })
     birthDate: Date;
 
-    @Column({ type: 'varchar', length: 20, nullable: false })
+    @Column({ type: 'enum', enum: ['Masculino', 'Femenino', 'Otro'], nullable: false })
     gender: string; // 'Masculino', 'Femenino', 'Otro'
 
-    @Column({ type: 'varchar', length: 50, default: 'Activo' })
+    @Column({ type: 'enum', enum: ['Activo', 'Seguimiento', 'Inactivo'], default: 'Activo' })
     status: string; // 'Activo', 'Seguimiento', 'Inactivo'
-
-    @CreateDateColumn({ type: 'timestamp' })
-    createdAt: Date;
-
-    @UpdateDateColumn({ type: 'timestamp' })
-    updatedAt: Date;
 
     @OneToMany(() => ClinicalRecord, (record) => record.patient)
     clinicalRecords: ClinicalRecord[];

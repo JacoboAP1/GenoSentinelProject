@@ -46,7 +46,7 @@ export class PatientsService {
     /**
      * Obtiene un paciente por ID
      */
-    async findOne(id: string): Promise<PatientDtoOut> {
+    async findOne(id: number): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -78,7 +78,7 @@ export class PatientsService {
     /**
      * Actualiza un paciente
      */
-    async update(id: string, updatePatientDto: UpdatePatientDtoIn): Promise<PatientDtoOut> {
+    async update(id: number, updatePatientDto: UpdatePatientDtoIn): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -101,7 +101,7 @@ export class PatientsService {
     /**
      * Desactiva un paciente (cambia estado a Inactivo)
      */
-    async deactivate(id: string): Promise<PatientDtoOut> {
+    async deactivate(id: number): Promise<PatientDtoOut> {
         const patient = await this.patientRepository.findOne({ where: { id } });
         if (!patient) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -115,7 +115,7 @@ export class PatientsService {
     /**
      * Elimina un paciente
      */
-    async remove(id: string): Promise<void> {
+    async remove(id: number): Promise<void> {
         const result = await this.patientRepository.delete(id);
         if (result.affected === 0) {
             throw new NotFoundException(`Paciente con ID ${id} no encontrado`);
@@ -134,15 +134,13 @@ export class PatientsService {
 
         return {
             id: patient.id,
-            firstName: patient.firstName,
-            lastName: patient.lastName,
+            // firstName: patient.firstName,
+            // lastName: patient.lastName,
             birthDate: patient.birthDate,
             gender: patient.gender,
             status: patient.status,
             fullName: `${patient.firstName} ${patient.lastName}`,
             age,
-            createdAt: patient.createdAt,
-            updatedAt: patient.updatedAt,
         };
     }
 }

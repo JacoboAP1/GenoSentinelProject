@@ -21,7 +21,7 @@ import { ClinicalRecordsModule } from './clinical-records/clinical-records.modul
             password: process.env.DB_PASSWORD || 'admin123',
             database: process.env.DB_DATABASE || 'genosentinel',
             entities: [__dirname + '/**/*.entity{.ts,.js}'],
-            synchronize: true, // Solo en desarrollo - en producción usar migraciones
+            synchronize: false, // Solo en desarrollo - en producción usar migraciones
             logging: false,
         }),
 

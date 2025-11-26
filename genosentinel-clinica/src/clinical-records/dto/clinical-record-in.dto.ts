@@ -1,14 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsNotEmpty, IsDateString, IsOptional, IsUUID, IsNumber } from 'class-validator';
+import { IsString, IsNotEmpty, IsDateString, IsOptional, IsNumber } from 'class-validator';
 
 /**
  * DTO IN para crear una historia clínica
  */
 export class CreateClinicalRecordDtoIn {
-    @ApiProperty({ example: 'uuid-patient-123', description: 'ID del paciente' })
-    @IsUUID('4', { message: 'ID de paciente inválido' })
+    @ApiProperty({ example: 1, description: 'ID del paciente' })
+    @IsNumber({}, { message: 'ID de paciente inválido' })
     @IsNotEmpty({ message: 'El ID del paciente es obligatorio' })
-    patientId: string;
+    patientId: number;
 
     @ApiProperty({ example: 1, description: 'ID del tipo de tumor' })
     @IsNumber({}, { message: 'ID de tipo de tumor inválido' })
@@ -29,21 +29,16 @@ export class CreateClinicalRecordDtoIn {
     @IsString()
     @IsOptional()
     treatmentProtocol?: string;
-
-    @ApiProperty({ example: 'Paciente respondiendo bien al tratamiento', description: 'Observaciones clínicas', required: false })
-    @IsString()
-    @IsOptional()
-    observations?: string;
 }
 
 /**
  * DTO IN para actualizar una historia clínica
  */
 export class UpdateClinicalRecordDtoIn {
-    @ApiProperty({ example: 'uuid-patient-123', description: 'ID del paciente', required: false })
-    @IsUUID('4', { message: 'ID de paciente inválido' })
+    @ApiProperty({ example: 1, description: 'ID del paciente', required: false })
+    @IsNumber({}, { message: 'ID de paciente inválido' })
     @IsOptional()
-    patientId?: string;
+    patientId?: number;
 
     @ApiProperty({ example: 1, description: 'ID del tipo de tumor', required: false })
     @IsNumber({}, { message: 'ID de tipo de tumor inválido' })
@@ -64,9 +59,4 @@ export class UpdateClinicalRecordDtoIn {
     @IsString()
     @IsOptional()
     treatmentProtocol?: string;
-
-    @ApiProperty({ example: 'Respuesta completa al tratamiento', description: 'Observaciones clínicas', required: false })
-    @IsString()
-    @IsOptional()
-    observations?: string;
 }
