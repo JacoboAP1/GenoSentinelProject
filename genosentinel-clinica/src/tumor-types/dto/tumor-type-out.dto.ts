@@ -12,7 +12,4 @@
 
       @ApiProperty({ example: 'Glándulas Mamarias', description: 'Sistema corporal afectado' })
       systemAffected: string;
-
-      @ApiProperty({ example: 'Tumor maligno del tejido mamario', description: 'Descripción del tumor' })
-      description: string;
   } 

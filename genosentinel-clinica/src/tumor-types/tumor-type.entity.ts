@@ -4,19 +4,16 @@ import { ClinicalRecord } from '../clinical-records/clinical-record.entity';
 /**
  * Entidad que representa un tipo de tumor oncológico
  */
-@Entity('tumor_types')
+@Entity('TumorType')
 export class TumorType {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column({ type: 'varchar', length: 150, unique: true, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: false })
     name: string;
 
-    @Column({ type: 'varchar', length: 100, nullable: false })
+    @Column({ type: 'varchar', length: 100, nullable: true, name: 'system_affected' })
     systemAffected: string;
-
-    @Column({ type: 'varchar', length: 500, nullable: true })
-    description: string;
 
     @OneToMany(() => ClinicalRecord, (record) => record.tumorType)
     clinicalRecords: ClinicalRecord[];

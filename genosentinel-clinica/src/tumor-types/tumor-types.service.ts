@@ -106,7 +106,6 @@ export class TumorTypesService {
             id: tumorType.id,
             name: tumorType.name,
             systemAffected: tumorType.systemAffected,
-            description: tumorType.description,
         };
     }
 }

@@ -57,7 +57,6 @@ export class ClinicalRecordsService {
             diagnosisDate,
             stage: createDto.stage,
             treatmentProtocol: createDto.treatmentProtocol,
-            observations: createDto.observations,
         });
 
         const saved = await this.clinicalRecordRepository.save(clinicalRecord);
@@ -77,7 +76,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene una historia clínica por ID
      */
-    async findOne(id: string): Promise<ClinicalRecordDtoOut> {
+    async findOne(id: number): Promise<ClinicalRecordDtoOut> {
         const record = await this.clinicalRecordRepository.findOne({
             where: { id },
             relations: ['patient', 'tumorType'],
@@ -93,7 +92,7 @@ export class ClinicalRecordsService {
     /**
      * Obtiene historias clínicas por paciente
      */
-    async findByPatient(patientId: string): Promise<ClinicalRecordDtoOut[]> {
+    async findByPatient(patientId: number): Promise<ClinicalRecordDtoOut[]> {
         const records = await this.clinicalRecordRepository.find({
             where: { patient: { id: patientId } },
             relations: ['patient', 'tumorType'],
@@ -117,7 +116,7 @@ export class ClinicalRecordsService {
     /**
      * Actualiza una historia clínica
      */
-    async update(id: string, updateDto: UpdateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
+    async update(id: number, updateDto: UpdateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
         const record = await this.clinicalRecordRepository.findOne({
             where: { id },
             relations: ['patient', 'tumorType'],
@@ -161,7 +160,6 @@ export class ClinicalRecordsService {
         // Actualizar otros campos
         if (updateDto.stage) record.stage = updateDto.stage;
         if (updateDto.treatmentProtocol !== undefined) record.treatmentProtocol = updateDto.treatmentProtocol;
-        if (updateDto.observations !== undefined) record.observations = updateDto.observations;
 
         const updated = await this.clinicalRecordRepository.save(record);
         return this.mapToResponse(updated);
@@ -170,7 +168,7 @@ export class ClinicalRecordsService {
     /**
      * Elimina una historia clínica
      */
-    async remove(id: string): Promise<void> {
+    async remove(id: number): Promise<void> {
         const result = await this.clinicalRecordRepository.delete(id);
         if (result.affected === 0) {
             throw new NotFoundException(`Historia clínica con ID ${id} no encontrada`);
@@ -191,9 +189,6 @@ export class ClinicalRecordsService {
             diagnosisDate: record.diagnosisDate,
             stage: record.stage,
             treatmentProtocol: record.treatmentProtocol,
-            observations: record.observations,
-            createdAt: record.createdAt,
-            updatedAt: record.updatedAt,
         };
     }
 }

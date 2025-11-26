@@ -30,18 +30,18 @@ export class ClinicalRecordsController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Obtener historia clínica por ID', description: 'Retorna la información de una historia clínica específica' })
-    @ApiParam({ name: 'id', description: 'ID de la historia clínica (UUID)', example: 'uuid-record-123' })
+    @ApiParam({ name: 'id', description: 'ID de la historia clínica', example: 1 })
     @ApiResponse({ status: 200, description: 'Historia clínica encontrada', type: ClinicalRecordDtoOut })
     @ApiResponse({ status: 404, description: 'Historia clínica no encontrada' })
-    async findOne(@Param('id') id: string): Promise<ClinicalRecordDtoOut> {
+    async findOne(@Param('id') id: number): Promise<ClinicalRecordDtoOut> {
         return this.clinicalRecordsService.findOne(id);
     }
 
     @Get('patient/:patientId')
     @ApiOperation({ summary: 'Obtener historias clínicas por paciente', description: 'Retorna todas las historias clínicas de un paciente específico' })
-    @ApiParam({ name: 'patientId', description: 'ID del paciente (UUID)', example: 'uuid-patient-123' })
+    @ApiParam({ name: 'patientId', description: 'ID del paciente', example: 1 })
     @ApiResponse({ status: 200, description: 'Historias clínicas obtenidas exitosamente', type: [ClinicalRecordDtoOut] })
-    async findByPatient(@Param('patientId') patientId: string): Promise<ClinicalRecordDtoOut[]> {
+    async findByPatient(@Param('patientId') patientId: number): Promise<ClinicalRecordDtoOut[]> {
         return this.clinicalRecordsService.findByPatient(patientId);
     }
 
@@ -55,21 +55,21 @@ export class ClinicalRecordsController {
 
     @Put(':id')
     @ApiOperation({ summary: 'Actualizar historia clínica', description: 'Actualiza la información de una historia clínica existente' })
-    @ApiParam({ name: 'id', description: 'ID de la historia clínica (UUID)', example: 'uuid-record-123' })
+    @ApiParam({ name: 'id', description: 'ID de la historia clínica', example: 1 })
     @ApiResponse({ status: 200, description: 'Historia clínica actualizada exitosamente', type: ClinicalRecordDtoOut })
     @ApiResponse({ status: 404, description: 'Historia clínica, paciente o tipo de tumor no encontrado' })
     @ApiResponse({ status: 400, description: 'Datos inválidos' })
-    async update(@Param('id') id: string, @Body() updateDto: UpdateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
+    async update(@Param('id') id: number, @Body() updateDto: UpdateClinicalRecordDtoIn): Promise<ClinicalRecordDtoOut> {
         return this.clinicalRecordsService.update(id, updateDto);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Eliminar historia clínica', description: 'Elimina permanentemente una historia clínica del sistema' })
-    @ApiParam({ name: 'id', description: 'ID de la historia clínica (UUID)', example: 'uuid-record-123' })
+    @ApiParam({ name: 'id', description: 'ID de la historia clínica', example: 1 })
     @ApiResponse({ status: 204, description: 'Historia clínica eliminada exitosamente' })
     @ApiResponse({ status: 404, description: 'Historia clínica no encontrada' })
-    async remove(@Param('id') id: string): Promise<void> {
+    async remove(@Param('id') id: number): Promise<void> {
         return this.clinicalRecordsService.remove(id);
     }
 }

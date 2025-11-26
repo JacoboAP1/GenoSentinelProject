@@ -45,39 +45,39 @@ export class PatientsController {
 
     @Get(':id')
     @ApiOperation({ summary: 'Obtener paciente por ID', description: 'Retorna la información de un paciente específico' })
-    @ApiParam({ name: 'id', description: 'ID único del paciente (UUID)', example: 'uuid-123-456' })
+    @ApiParam({ name: 'id', description: 'ID único del paciente', example: 1 })
     @ApiResponse({ status: 200, description: 'Paciente encontrado', type: PatientDtoOut })
     @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
-    async findOne(@Param('id') id: string): Promise<PatientDtoOut> {
+    async findOne(@Param('id') id: number): Promise<PatientDtoOut> {
         return this.patientsService.findOne(id);
     }
 
     @Put(':id')
     @ApiOperation({ summary: 'Actualizar paciente', description: 'Actualiza la información de un paciente existente' })
-    @ApiParam({ name: 'id', description: 'ID único del paciente (UUID)', example: 'uuid-123-456' })
+    @ApiParam({ name: 'id', description: 'ID único del paciente', example: 1 })
     @ApiResponse({ status: 200, description: 'Paciente actualizado exitosamente', type: PatientDtoOut })
     @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
     @ApiResponse({ status: 400, description: 'Datos inválidos' })
-    async update(@Param('id') id: string, @Body() updatePatientDto: UpdatePatientDtoIn): Promise<PatientDtoOut> {
+    async update(@Param('id') id: number, @Body() updatePatientDto: UpdatePatientDtoIn): Promise<PatientDtoOut> {
         return this.patientsService.update(id, updatePatientDto);
     }
 
     @Patch(':id/deactivate')
     @ApiOperation({ summary: 'Desactivar paciente', description: 'Cambia el estado del paciente a Inactivo' })
-    @ApiParam({ name: 'id', description: 'ID único del paciente (UUID)', example: 'uuid-123-456' })
+    @ApiParam({ name: 'id', description: 'ID único del paciente', example: 1 })
     @ApiResponse({ status: 200, description: 'Paciente desactivado exitosamente', type: PatientDtoOut })
     @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
-    async deactivate(@Param('id') id: string): Promise<PatientDtoOut> {
+    async deactivate(@Param('id') id: number): Promise<PatientDtoOut> {
         return this.patientsService.deactivate(id);
     }
 
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'Eliminar paciente', description: 'Elimina permanentemente un paciente del sistema' })
-    @ApiParam({ name: 'id', description: 'ID único del paciente (UUID)', example: 'uuid-123-456' })
+    @ApiParam({ name: 'id', description: 'ID único del paciente', example: 1 })
     @ApiResponse({ status: 204, description: 'Paciente eliminado exitosamente' })
     @ApiResponse({ status: 404, description: 'Paciente no encontrado' })
-    async remove(@Param('id') id: string): Promise<void> {
+    async remove(@Param('id') id: number): Promise<void> {
         return this.patientsService.remove(id);
     }
 }
