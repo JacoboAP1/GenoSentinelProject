@@ -6,7 +6,7 @@ import com.genosentinel.authentication.exceptions.UsernameAlreadyExistsException
 import com.genosentinel.authentication.service.JwtService;
 import com.genosentinel.authentication.models.entities.Role;
 import com.genosentinel.authentication.models.entities.Users;
-import com.genosentinel.authentication.models.dto.RegisterRequest;
+import com.genosentinel.authentication.models.dto.authDTO.RegisterRequest;
 import com.genosentinel.authentication.repository.RoleRepository;
 import com.genosentinel.authentication.repository.UsersRepository;
 import com.genosentinel.authentication.exceptions.InvalidEmailException;
@@ -30,7 +30,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
  */
 @Tag(name = "Autenticación", description = "Endpoints para el registro y login de usuarios") // Swagger annotation
 @RestController
-@RequestMapping("") // No agregar prefijo; ya está en server.servlet.context-path
+@RequestMapping("/auth")
 @RequiredArgsConstructor
 public class AuthController {
 

@@ -1,4 +1,4 @@
-package com.genosentinel.authentication.models.dto;
+package com.genosentinel.authentication.models.dto.authDTO;
 
 import lombok.Data;
 

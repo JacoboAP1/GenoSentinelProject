@@ -5,10 +5,12 @@ from rest_framework import status
 from genomics_api.exceptions.FieldNotFilledException import (
     FieldNotFilledException,
 )
+from genomics_api.exceptions.GeneExceptions import GeneNotFoundException, GeneDuplicatedException
 from genomics_api.exceptions.GeneticVariantExceptions import (
-    InvalidImpactValueException,
+    InvalidImpactValueException, VariantNotFoundException, ChromosomeDuplicatedException,
 )
-from genomics_api.exceptions.PatientNotFoundException import PatientNotFoundException
+from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException
+
 
 def custom_exception_handler(exc, context):
     # Primero se deja que DRF maneje sus propias excepciones
@@ -24,7 +26,7 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, InvalidImpactValueException):
         return Response(
             {"success": False, "error": "Invalid impact value", "message": str(exc)},
-            status=status.HTTP_206_PARTIAL_CONTENT
+            status=status.HTTP_400_BAD_REQUEST
         )
 
     if isinstance(exc, PatientNotFoundException):
@@ -33,9 +35,38 @@ def custom_exception_handler(exc, context):
             status=status.HTTP_404_NOT_FOUND
         )
 
+    if isinstance(exc, GeneNotFoundException):
+        return Response(
+            {"success": False, "error": "Gene ID not found", "message": str(exc)},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if isinstance(exc, GeneDuplicatedException):
+        return Response(
+            {"success": False, "error": "Gene symbol already exists", "message": str(exc)},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if isinstance(exc, VariantNotFoundException):
+        return Response(
+            {"success": False, "error": "Variant ID not found", "message": str(exc)},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if isinstance(exc, ReportNotFoundException):
+        return Response(
+            {"success": False, "error": "Report ID not found", "message": str(exc)},
+            status=status.HTTP_404_NOT_FOUND
+        )
+
+    if isinstance(exc, ChromosomeDuplicatedException):
+        return Response(
+            {"success": False, "error": "Chromosome already exists", "message": str(exc)},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
     # Si ninguna coincidió pero DRF devolvió una respuesta por defecto
     if response is not None:
-        # Empaquetamos igual que el DTO de salida
         response.data = {
             "success": False,
             "error": "DRF_ERROR",

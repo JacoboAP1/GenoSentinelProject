@@ -1,3 +1,4 @@
+from genomics_api.exceptions.GeneExceptions import GeneNotFoundException, GeneDuplicatedException
 from genomics_api.models.dtos.GeneDtos.GeneInDTO import GeneInDTO
 from genomics_api.models.entities.Gene import Gene
 from genomics_api.exceptions.FieldNotFilledException import FieldNotFilledException
@@ -21,13 +22,15 @@ class GeneService:
 
     @staticmethod
     def get_gene(id):
-        g = Gene.objects.get(pk=id)
+        # filter().first() devuelve el objeto o None si no existe
+        g = Gene.objects.filter(pk=id).first()
+        if g is None:
+            raise GeneNotFoundException("Enter an existing ID")
 
         dto = GeneOutDTO(
             symbol=g.symbol,
             full_name=g.full_name
         )
-
         return dto.to_dict()
 
     @staticmethod
@@ -38,14 +41,20 @@ class GeneService:
             function_summary= data.get("function_summary")
         )
 
-        if not inDto.symbol or inDto.symbol.strip() == "":
-            raise FieldNotFilledException("symbol is required")
+        fields = {"symbol": inDto.symbol, "full_name": inDto.full_name,
+                  "function_summary": inDto.function_summary}
 
-        if not inDto.full_name or inDto.full_name.strip() == "":
-            raise FieldNotFilledException("full_name is required")
+        for name, value in fields.items():
+            # Primero valida que exista (sirve tanto para strings como para objetos)
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
-        if not inDto.function_summary or inDto.function_summary.strip() == "":
-            raise FieldNotFilledException("function_summary is required")
+            # Si es string, valida el vacío
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
+
+        if Gene.objects.filter(symbol=inDto.symbol).exists():
+            raise GeneDuplicatedException("Enter another symbol")
 
         gene = Gene.objects.create(
             symbol= inDto.symbol,
@@ -68,14 +77,20 @@ class GeneService:
             function_summary= data.get("function_summary")
         )
 
-        if not inDto.symbol or inDto.symbol.strip() == "":
-            raise FieldNotFilledException("symbol is required")
+        fields = {"symbol": inDto.symbol, "full_name": inDto.full_name,
+                  "function_summary": inDto.function_summary}
 
-        if not inDto.full_name or inDto.full_name.strip() == "":
-            raise FieldNotFilledException("full_name is required")
+        for name, value in fields.items():
+            # Primero valida que exista (sirve tanto para strings como para objetos)
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
-        if not inDto.function_summary or inDto.function_summary.strip() == "":
-            raise FieldNotFilledException("function_summary is required")
+            # Si es string, valida el vacío
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
+
+        if Gene.objects.filter(symbol=inDto.symbol).exists():
+            raise GeneDuplicatedException("Enter another symbol")
 
         instance.symbol = inDto.symbol
         instance.full_name = inDto.full_name
