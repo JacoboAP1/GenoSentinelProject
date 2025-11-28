@@ -1,8 +1,11 @@
+from genomics_api.exceptions.GeneExceptions import GeneNotFoundException, GeneDuplicatedException
+from genomics_api.models import Gene
 from genomics_api.models.dtos.GeneticVariantDtos.VariantInDTO import VariantInDTO
 from genomics_api.models.dtos.GeneticVariantDtos.VariantOutDTO import VariantOutDTO
 from genomics_api.models.entities.GeneticVariant import GeneticVariant
 from genomics_api.exceptions.FieldNotFilledException import FieldNotFilledException
-from genomics_api.exceptions.GeneticVariantExceptions import InvalidImpactValueException
+from genomics_api.exceptions.GeneticVariantExceptions import InvalidImpactValueException, VariantNotFoundException, \
+    ChromosomeDuplicatedException
 
 
 class VariantService:
@@ -24,7 +27,11 @@ class VariantService:
 
     @staticmethod
     def get_variant(id):
-        v = GeneticVariant.objects.get(pk=id)
+        # filter().first() devuelve el objeto o None si no existe
+        v = GeneticVariant.objects.filter(pk=id).first()
+
+        if v is None:
+            raise VariantNotFoundException("Enter an existing ID")
 
         dto = VariantOutDTO(
             gene_id= v.gene_id,
@@ -45,17 +52,24 @@ class VariantService:
             impact = data.get("impact")
         )
 
-        required_fields = [inDto.gene_id, inDto.chromosome, inDto.position, inDto.reference_base,
-                           inDto.alternate_base, inDto.impact]
+        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
+            raise GeneNotFoundException("Enter an existing gene_id")
 
-        for field in required_fields:
+        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
+            raise ChromosomeDuplicatedException("Enter another chromosome")
+
+        fields = {"gene_id": inDto.gene_id, "chromosome": inDto.chromosome,
+            "position": inDto.position, "reference_base": inDto.reference_base, "alternate_base": inDto.alternate_base,
+            "impact": inDto.impact}
+
+        for name, value in fields.items():
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not field:
-                raise FieldNotFilledException(f"{field} is required")
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
             # Si es string, valida el vacío
-            if isinstance(field, str) and field.strip() == "":
-                raise FieldNotFilledException(f"{field} cannot be blank")
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
 
         IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
                          "Splice", "Other"]
@@ -93,17 +107,24 @@ class VariantService:
             impact = data.get("impact")
         )
 
-        required_fields = [inDto.gene_id, inDto.chromosome, inDto.position, inDto.reference_base,
-                           inDto.alternate_base, inDto.impact]
+        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
+            raise GeneNotFoundException("Enter an existing gene_id")
 
-        for field in required_fields:
+        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
+            raise ChromosomeDuplicatedException("Enter another chromosome")
+
+        fields = {"gene_id": inDto.gene_id, "chromosome": inDto.chromosome,
+                  "position": inDto.position, "reference_base": inDto.reference_base, "alternate_base": inDto.alternate_base,
+                  "impact": inDto.impact}
+
+        for name, value in fields.items():
             # Primero valida que exista (sirve tanto para strings como para objetos)
-            if not field:
-                raise FieldNotFilledException(f"{field} is required")
+            if value is None:
+                raise FieldNotFilledException(f"{name} is required")
 
             # Si es string, valida el vacío
-            if isinstance(field, str) and field.strip() == "":
-                raise FieldNotFilledException(f"{field} cannot be blank")
+            if isinstance(value, str) and value.strip() == "":
+                raise FieldNotFilledException(f"{name} cannot be blank")
 
         IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
                          "Splice", "Other"]

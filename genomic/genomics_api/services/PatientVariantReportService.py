@@ -1,4 +1,6 @@
-from genomics_api.exceptions.PatientNotFoundException import PatientNotFoundException
+from genomics_api.exceptions.GeneticVariantExceptions import VariantNotFoundException
+from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException
+from genomics_api.models import GeneticVariant
 from genomics_api.models.dtos.ReportsDtos.ReportsInDTO import ReportsInDTO
 from genomics_api.models.dtos.ReportsDtos.ReportsOutDTO import ReportsOutDTO
 from genomics_api.models.entities.PatientVariantReport import PatientVariantReport
@@ -24,7 +26,10 @@ class ReportService:
 
     @staticmethod
     def get_report(id):
-        r = PatientVariantReport.objects.get(pk=id)
+        # filter().first() devuelve el objeto o None si no existe
+        r = PatientVariantReport.objects.filter(pk=id).first()
+        if r is None:
+            raise ReportNotFoundException("Enter an existing report_id")
 
         dto = ReportsOutDTO(
             patient_id= r.patient_id,
@@ -47,6 +52,9 @@ class ReportService:
 
         if not client:
             raise PatientNotFoundException("Enter an existing ID")
+
+        if GeneticVariant.objects.filter(pk=inDto.variant_id).first() is None:
+            raise VariantNotFoundException("Enter an existing variant_id")
 
         fields = {
             "patient_id": inDto.patient_id,
@@ -93,6 +101,9 @@ class ReportService:
 
         if not client:
             raise PatientNotFoundException("Enter an existing ID")
+
+        if GeneticVariant.objects.filter(pk=inDto.variant_id).first() is None:
+            raise VariantNotFoundException("Enter an existing variant_id")
 
         fields = {
             "patient_id": inDto.patient_id,

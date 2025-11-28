@@ -56,8 +56,9 @@ public class SecurityConfig {
                                 // Le da permisos de acceder a los endpoints a los usuarios con credenciales
                                 // creadas o permite acceder libremente a Swagger UI y a los endpoints
                                 // de documentación. De resto, a nadie más
-                                "login",
-                                "register",
+                                "/auth/login",
+                                "/auth/register",
+                                "/gateway/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui/**",
                                 "/swagger-ui.html"

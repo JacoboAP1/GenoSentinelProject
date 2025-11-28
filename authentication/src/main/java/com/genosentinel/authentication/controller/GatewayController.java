@@ -1,55 +1,85 @@
 package com.genosentinel.authentication.controller;
 
-import lombok.RequiredArgsConstructor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.genosentinel.authentication.models.dto.geneDTO.GeneInDTO;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.servlet.http.HttpServletRequest;
-
+/**
+ * Controlador para manejar endpoints Gateway
+ * No hace lógica de negocio, solo:
+ * Recibir la petición
+ * Tomar el body o parámetros
+ * Serializar el DTO
+ * Enviar la petición al microservicio de Django
+ * Devolver la respuesta
+ */
 @RestController
-@RequestMapping("")
-@RequiredArgsConstructor
+@RequestMapping("/gateway")
 public class GatewayController {
+    private ObjectMapper objectMapper;
+    private final RestTemplate restTemplate;
 
-    private final RestTemplate restTemplate = new RestTemplate();
-
-    // URL de los microservicios destino
-    private final String CLINIC_BASE_URL = "http://localhost:3000/genosentinel/clinica";   // Nest
-    private final String GENOMICS_BASE_URL = "http://localhost:8000/genomic"; // Django
-
-    @RequestMapping("/clinica/**")
-    public ResponseEntity<?> redirectClinic(HttpServletRequest request, @RequestBody(required = false) String body) {
-
-        String path = request.getRequestURI().replace("/clinica", "");
-        String url = CLINIC_BASE_URL + path;
-
-        return forwardRequest(request, body, url);
+    public GatewayController(ObjectMapper objectMapper){
+        this.objectMapper = objectMapper;
+        this.restTemplate = new RestTemplate();
     }
 
-    @RequestMapping("/genomic/**")
-    public ResponseEntity<?> redirectGenomics(HttpServletRequest request, @RequestBody(required = false) String body) {
+    @GetMapping("/obtener_genes")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> getGeneList() {
+        String djangoUrl = "http://localhost:8000/genomic/gene/";
 
-        String path = request.getRequestURI().replace("/genomic", "");
-        String url = GENOMICS_BASE_URL + path;
-
-        return forwardRequest(request, body, url);
+        ResponseEntity<String> response = restTemplate.getForEntity(djangoUrl, String.class);
+        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
     }
 
-    private ResponseEntity<?> forwardRequest(HttpServletRequest req, String body, String url) {
+    @GetMapping("/obtener_genes/{id}")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> getGeneById(@PathVariable("id") Long id) {
+        String djangoUrl = "http://localhost:8000/genomic/gene/" + id;
 
-        HttpMethod method = HttpMethod.valueOf(req.getMethod());
+        try {
+            ResponseEntity<String> response = restTemplate.getForEntity(djangoUrl, String.class);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+        } catch (org.springframework.web.client.RestClientResponseException e) {
+            // Aquí se captura cualquier excepción y trae el cuerpo de django con HttpClient
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+        }
+    }
 
-        // Forward JWT
-        String auth = req.getHeader("Authorization");
-        if (auth != null)
-            headers.set("Authorization", auth);
+    @PostMapping("/crear_gen")
+    @PreAuthorize("hasRole('USER')")
+    public ResponseEntity<String> createGene(@RequestBody GeneInDTO dto) {
+        String json;
+        String djangoUrl = "http://localhost:8000/genomic/gene/";
 
-        HttpEntity<String> entity = new HttpEntity<>(body, headers);
+        try {
+            // serializando json para que Django capte los campos del InDTO
+            json = objectMapper.writeValueAsString(dto);
 
-        return restTemplate.exchange(url, method, entity, String.class);
+            // Se crean los headers para indicarle a Django que el cuerpo
+            // del request está en formato JSON
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+
+            // Se empaqueta el JSON junto con los headers antes de enviarlo a Django
+            HttpEntity<String> request = new HttpEntity<>(json, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity(djangoUrl, request, String.class);
+            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error serializando JSON: " + e.getMessage());
+
+        } catch (org.springframework.web.client.RestClientResponseException e) {
+            // Aquí se captura cualquier excepción y trae el cuerpo de django
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString());
+        }
     }
 }
