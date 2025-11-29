@@ -5,3 +5,7 @@ class PatientNotFoundException(Exception):
 class ReportNotFoundException(Exception):
     def __init__(self, message):
         super().__init__(message)
+
+class ReportDuplicatedException(Exception):
+    def __init__(self, message):
+        super().__init__(message)
