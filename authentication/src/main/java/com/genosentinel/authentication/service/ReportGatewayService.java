@@ -19,19 +19,20 @@ public class ReportGatewayService {
         this.restTemplate = new RestTemplate();
     }
 
-    public ResponseEntity<String> getReportList() {
+    public ResponseEntity<Object> getReportList() {
         String djangoUrl = "http://localhost:8000/genomic/reports/";
 
-        ResponseEntity<String> response = restTemplate.getForEntity(djangoUrl, String.class);
-        return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+        // RestTemplate recibe el JSON de Django y lo deserializa a un objeto Java
+        // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
+        // Por eso retornamos Object, pero la respuesta final es JSON real
+        return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class );
     }
 
-    public ResponseEntity<String> getReportById(Long id) {
+    public ResponseEntity<Object> getReportById(Long id) {
         String djangoUrl = "http://localhost:8000/genomic/reports/" + id;
 
         try {
-            ResponseEntity<String> response = restTemplate.getForEntity(djangoUrl, String.class);
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class );
 
         } catch (org.springframework.web.client.RestClientResponseException e) {
             // Aquí se captura cualquier excepción y trae el cuerpo de django con HttpClient
@@ -39,12 +40,12 @@ public class ReportGatewayService {
         }
     }
 
-    public ResponseEntity<String> createReport(ReportInDTO dto) {
+    public ResponseEntity<Object> createReport(ReportInDTO dto) {
         String json;
         String djangoUrl = "http://localhost:8000/genomic/reports/";
 
         try {
-            // serializando json para que Django capte los campos del InDTO
+            // serializando InDTO a json para que Django capte los campos
             json = objectMapper.writeValueAsString(dto);
 
             // Se crean los headers para indicarle a Django que el cuerpo
@@ -55,8 +56,10 @@ public class ReportGatewayService {
             // Se empaqueta el JSON junto con los headers antes de enviarlo a Django
             HttpEntity<String> request = new HttpEntity<>(json, headers);
 
-            ResponseEntity<String> response = restTemplate.postForEntity(djangoUrl, request, String.class);
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            // Se envía la petición a Django
+            // RestTemplate convierte el JSON de Django en un objeto Java
+            // y Spring Boot lo vuelve a JSON al responder al cliente
+            return restTemplate.exchange(djangoUrl, HttpMethod.POST, request, Object.class);
 
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -68,7 +71,7 @@ public class ReportGatewayService {
         }
     }
 
-    public ResponseEntity<String> updateReport(ReportInDTO dto, Long id) {
+    public ResponseEntity<Object> updateReport(ReportInDTO dto, Long id) {
         String json;
         String djangoUrl = "http://localhost:8000/genomic/reports/" + id + "/";
 
@@ -80,13 +83,7 @@ public class ReportGatewayService {
 
             HttpEntity<String> request = new HttpEntity<>(json, headers);
 
-            // Hacer PUT con exchange
-            ResponseEntity<String> response = restTemplate.exchange(djangoUrl, HttpMethod.PUT,
-                    request,
-                    String.class
-            );
-
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            return restTemplate.exchange(djangoUrl, HttpMethod.PUT, request, Object.class);
 
         } catch (JsonProcessingException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -97,19 +94,11 @@ public class ReportGatewayService {
         }
     }
 
-    public ResponseEntity<String> deleteReport(Long id) {
+    public ResponseEntity<Object> deleteReport(Long id) {
         String djangoUrl = "http://localhost:8000/genomic/reports/" + id + "/";
 
         try {
-            // Hacemos DELETE usando exchange porque delete() no devuelve respuesta
-            ResponseEntity<String> response = restTemplate.exchange(
-                    djangoUrl,
-                    HttpMethod.DELETE,
-                    null,
-                    String.class
-            );
-
-            return ResponseEntity.status(response.getStatusCode()).body(response.getBody());
+            return restTemplate.exchange(djangoUrl, HttpMethod.DELETE, null, Object.class);
 
         } catch (org.springframework.web.client.RestClientResponseException e) {
             // Si Django devuelve 404, 400, 500, etc, capturamos el JSON

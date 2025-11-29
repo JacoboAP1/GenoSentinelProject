@@ -29,7 +29,7 @@ public class VariantGatewayController {
     })
     @GetMapping("/obtener_variantes")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getVariantList() {
+    public ResponseEntity<Object> getVariantList() {
         return variantService.getVariantList();
     }
 
@@ -43,7 +43,7 @@ public class VariantGatewayController {
     })
     @GetMapping("/obtener_variantes/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getVariantById(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getVariantById(@PathVariable("id") Long id) {
         return variantService.getVariantById(id);
     }
 
@@ -57,7 +57,7 @@ public class VariantGatewayController {
     })
     @PostMapping("/crear_variante")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> createVariant(@RequestBody VariantInDTO dto) {
+    public ResponseEntity<Object> createVariant(@RequestBody VariantInDTO dto) {
         return variantService.createVariant(dto);
     }
 
@@ -71,7 +71,7 @@ public class VariantGatewayController {
     })
     @PutMapping("/actualizar_variante/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> updateVariant(@RequestBody VariantInDTO dto, @PathVariable
+    public ResponseEntity<Object> updateVariant(@RequestBody VariantInDTO dto, @PathVariable
             ("id") Long id) {
         return variantService.updateVariant(dto, id);
     }
@@ -86,7 +86,7 @@ public class VariantGatewayController {
     })
     @DeleteMapping("/eliminar_variante/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> deleteVariant(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteVariant(@PathVariable("id") Long id) {
         return variantService.deleteVariant(id);
     }
 }

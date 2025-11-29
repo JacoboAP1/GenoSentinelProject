@@ -29,7 +29,7 @@ public class ReportGatewayController {
     }) //Swagger annotation
     @GetMapping("/obtener_reportes")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getReportList() {
+    public ResponseEntity<Object> getReportList() {
         return reportService.getReportList();
     }
 
@@ -43,7 +43,7 @@ public class ReportGatewayController {
     })
     @GetMapping("/obtener_reportes/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getReportById(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getReportById(@PathVariable("id") Long id) {
         return reportService.getReportById(id);
     }
 
@@ -57,7 +57,7 @@ public class ReportGatewayController {
     })
     @PostMapping("/crear_reporte")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> createReport(@RequestBody ReportInDTO dto) {
+    public ResponseEntity<Object> createReport(@RequestBody ReportInDTO dto) {
         return reportService.createReport(dto);
     }
 
@@ -71,7 +71,7 @@ public class ReportGatewayController {
     })
     @PutMapping("/actualizar_reporte/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> updateReport(@RequestBody ReportInDTO dto, @PathVariable
+    public ResponseEntity<Object> updateReport(@RequestBody ReportInDTO dto, @PathVariable
             ("id") Long id) {
         return reportService.updateReport(dto, id);
     }
@@ -86,7 +86,7 @@ public class ReportGatewayController {
     })
     @DeleteMapping("/eliminar_reporte/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> deleteReport(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteReport(@PathVariable("id") Long id) {
         return reportService.deleteReport(id);
     }
 }

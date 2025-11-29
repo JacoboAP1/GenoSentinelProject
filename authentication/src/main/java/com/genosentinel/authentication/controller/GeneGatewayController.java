@@ -38,7 +38,7 @@ public class GeneGatewayController {
     }) //Swagger annotation
     @GetMapping("/obtener_genes")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getGeneList() {
+    public ResponseEntity<Object> getGeneList() {
         return geneService.getGeneList();
     }
 
@@ -52,7 +52,7 @@ public class GeneGatewayController {
     }) //Swagger annotation
     @GetMapping("/obtener_genes/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> getGeneById(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> getGeneById(@PathVariable("id") Long id) {
         return geneService.getGeneById(id);
     }
 
@@ -66,7 +66,7 @@ public class GeneGatewayController {
     }) //Swagger annotation
     @PostMapping("/crear_gen")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> createGene(@RequestBody GeneInDTO dto) {
+    public ResponseEntity<Object> createGene(@RequestBody GeneInDTO dto) {
         return geneService.createGene(dto);
     }
 
@@ -80,7 +80,7 @@ public class GeneGatewayController {
     }) //Swagger annotation
     @PutMapping("/actualizar_gen/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> updateGene(@RequestBody GeneInDTO dto, @PathVariable
+    public ResponseEntity<Object> updateGene(@RequestBody GeneInDTO dto, @PathVariable
                                                                         ("id") Long id) {
         return geneService.updateGene(dto, id);
     }
@@ -95,7 +95,7 @@ public class GeneGatewayController {
     }) //Swagger annotation
     @DeleteMapping("/eliminar_gen/{id}")
     @PreAuthorize("hasRole('USER')")
-    public ResponseEntity<String> deleteGene(@PathVariable("id") Long id) {
+    public ResponseEntity<Object> deleteGene(@PathVariable("id") Long id) {
         return geneService.deleteGene(id);
     }
 }
