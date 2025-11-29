@@ -1,5 +1,6 @@
 from genomics_api.exceptions.GeneticVariantExceptions import VariantNotFoundException
-from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException
+from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException, \
+    ReportDuplicatedException
 from genomics_api.models import GeneticVariant
 from genomics_api.models.dtos.ReportsDtos.ReportsInDTO import ReportsInDTO
 from genomics_api.models.dtos.ReportsDtos.ReportsOutDTO import ReportsOutDTO
@@ -73,6 +74,9 @@ class ReportService:
             if isinstance(value, str) and value.strip() == "":
                 raise FieldNotFilledException(f"{name} cannot be blank")
 
+        if PatientVariantReport.objects.filter(detection_date=inDto.detection_date).exists():
+            raise ReportDuplicatedException("Enter another date")
+
         report = PatientVariantReport.objects.create(
             patient_id = inDto.patient_id,
             variant_id = inDto.variant_id,
@@ -121,6 +125,9 @@ class ReportService:
             # Si es string, valida el vacío
             if isinstance(value, str) and value.strip() == "":
                 raise FieldNotFilledException(f"{name} cannot be blank")
+
+        if PatientVariantReport.objects.filter(detection_date=inDto.detection_date).exists():
+            raise ReportDuplicatedException("Enter another date")
 
         instance.patient_id = inDto.patient_id
         instance.variant_id = inDto.variant_id

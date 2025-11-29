@@ -52,12 +52,6 @@ class VariantService:
             impact = data.get("impact")
         )
 
-        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
-            raise GeneNotFoundException("Enter an existing gene_id")
-
-        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
-            raise ChromosomeDuplicatedException("Enter another chromosome")
-
         fields = {"gene_id": inDto.gene_id, "chromosome": inDto.chromosome,
             "position": inDto.position, "reference_base": inDto.reference_base, "alternate_base": inDto.alternate_base,
             "impact": inDto.impact}
@@ -70,6 +64,12 @@ class VariantService:
             # Si es string, valida el vacío
             if isinstance(value, str) and value.strip() == "":
                 raise FieldNotFilledException(f"{name} cannot be blank")
+
+        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
+            raise GeneNotFoundException("Enter an existing gene_id")
+
+        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
+            raise ChromosomeDuplicatedException("Enter another chromosome")
 
         IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
                          "Splice", "Other"]
@@ -107,12 +107,6 @@ class VariantService:
             impact = data.get("impact")
         )
 
-        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
-            raise GeneNotFoundException("Enter an existing gene_id")
-
-        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
-            raise ChromosomeDuplicatedException("Enter another chromosome")
-
         fields = {"gene_id": inDto.gene_id, "chromosome": inDto.chromosome,
                   "position": inDto.position, "reference_base": inDto.reference_base, "alternate_base": inDto.alternate_base,
                   "impact": inDto.impact}
@@ -125,6 +119,12 @@ class VariantService:
             # Si es string, valida el vacío
             if isinstance(value, str) and value.strip() == "":
                 raise FieldNotFilledException(f"{name} cannot be blank")
+
+        if Gene.objects.filter(pk=inDto.gene_id).first() is None:
+            raise GeneNotFoundException("Enter an existing gene_id")
+
+        if GeneticVariant.objects.filter(chromosome=inDto.chromosome).exists():
+            raise ChromosomeDuplicatedException("Enter another chromosome")
 
         IMPACT_VALUES = ["Missense", "Frameshift", "Nonsense", "Silent",
                          "Splice", "Other"]

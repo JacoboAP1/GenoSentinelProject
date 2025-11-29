@@ -9,7 +9,8 @@ from genomics_api.exceptions.GeneExceptions import GeneNotFoundException, GeneDu
 from genomics_api.exceptions.GeneticVariantExceptions import (
     InvalidImpactValueException, VariantNotFoundException, ChromosomeDuplicatedException,
 )
-from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException
+from genomics_api.exceptions.ReportExceptions import PatientNotFoundException, ReportNotFoundException, \
+    ReportDuplicatedException
 
 
 def custom_exception_handler(exc, context):
@@ -62,6 +63,12 @@ def custom_exception_handler(exc, context):
     if isinstance(exc, ChromosomeDuplicatedException):
         return Response(
             {"success": False, "error": "Chromosome already exists", "message": str(exc)},
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    if isinstance(exc, ReportDuplicatedException):
+        return Response(
+            {"success": False, "error": "Report already exists with that date", "message": str(exc)},
             status=status.HTTP_400_BAD_REQUEST
         )
 
