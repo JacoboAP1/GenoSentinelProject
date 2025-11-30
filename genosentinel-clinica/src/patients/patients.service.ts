@@ -134,8 +134,8 @@ export class PatientsService {
 
         return {
             id: patient.id,
-            // firstName: patient.firstName,
-            // lastName: patient.lastName,
+            firstName: patient.firstName,
+            lastName: patient.lastName,
             birthDate: patient.birthDate,
             gender: patient.gender,
             status: patient.status,
