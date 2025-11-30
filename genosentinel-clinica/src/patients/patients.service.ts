@@ -59,7 +59,15 @@ export class PatientsService {
      */
     async findByStatus(status: string): Promise<PatientDtoOut[]> {
         const patients = await this.patientRepository.find({ where: { status } });
+        if (patients.length === 0) {
+            throw new NotFoundException(
+                `No se encontraron pacientes con el estado: "${status}"`
+            );
+        }
+
         return patients.map((patient) => this.mapToResponse(patient));
+
+
     }
 
     /**
@@ -71,6 +79,12 @@ export class PatientsService {
             .where('patient.firstName LIKE :name', { name: `%${name}%` })
             .orWhere('patient.lastName LIKE :name', { name: `%${name}%` })
             .getMany();
+
+        if (patients.length === 0) {
+            throw new NotFoundException(
+                `No se encontraron pacientes con el nombre: "${name}"`
+            );
+        }
 
         return patients.map((patient) => this.mapToResponse(patient));
     }

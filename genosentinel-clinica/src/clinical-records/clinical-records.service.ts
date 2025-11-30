@@ -93,6 +93,15 @@ export class ClinicalRecordsService {
      * Obtiene historias clínicas por paciente
      */
     async findByPatient(patientId: number): Promise<ClinicalRecordDtoOut[]> {
+        // Verificar que el paciente existe
+        const patient = await this.patientRepository.findOne({
+            where: { id: patientId }
+        });
+
+        if (!patient) {
+            throw new NotFoundException(`Paciente con ID ${patientId} no encontrado`);
+        }
+
         const records = await this.clinicalRecordRepository.find({
             where: { patient: { id: patientId } },
             relations: ['patient', 'tumorType'],
@@ -105,10 +114,24 @@ export class ClinicalRecordsService {
      * Obtiene historias clínicas por tipo de tumor
      */
     async findByTumorType(tumorTypeId: number): Promise<ClinicalRecordDtoOut[]> {
+        // Verificar que el tipo de tumor existe
+        const tumorType = await this.tumorTypeRepository.findOne({
+            where: { id: tumorTypeId }
+        });
+
+        if (!tumorType) {
+            throw new NotFoundException(`Tipo de tumor con ID ${tumorTypeId} no encontrado`);
+        }
+
         const records = await this.clinicalRecordRepository.find({
             where: { tumorType: { id: tumorTypeId } },
             relations: ['patient', 'tumorType'],
         });
+
+        // Mensaje si no hay historias clínicas registradas
+        if (records.length === 0) {
+            throw new NotFoundException(`No hay historias clínicas registradas para el tipo de tumor con ID ${tumorTypeId}`);
+        }
 
         return Promise.all(records.map((record) => this.mapToResponse(record)));
     }
