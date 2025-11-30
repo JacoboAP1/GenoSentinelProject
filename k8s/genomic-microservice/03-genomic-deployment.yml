@@ -1,0 +1,62 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: genomic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: genomic-service
+  template:
+    metadata:
+      labels:
+        app: genomic-service
+    spec:
+      containers:
+        - name: genomic-service
+          image: genosentinel-genomic:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: genomic-secret
+                  key: db-username
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: genomic-secret
+                  key: db-password
+
+            - name: DJANGO_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: genomic-secret
+                  key: django-secret-key
+
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: genomic-configmap
+                  key: db-host
+
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: genomic-configmap
+                  key: db-port
+
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: genomic-configmap
+                  key: db-name
+
+            - name: ALLOWED_HOSTS
+              valueFrom:
+                configMapKeyRef:
+                  name: genomic-configmap
+                  key: allowed-hosts

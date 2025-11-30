@@ -43,7 +43,7 @@ public class GeneGatewayService {
 
     public ResponseEntity<Object> createGene(GeneInDTO dto) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/gene/";
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/";
 
         try {
             // serializando InDTO a json para que Django capte los campos
