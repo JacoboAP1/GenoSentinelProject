@@ -58,11 +58,18 @@ export class TumorTypesService {
     async searchBySystem(system: string): Promise<TumorTypeDtoOut[]> {
         const tumorTypes = await this.tumorTypeRepository
             .createQueryBuilder('tumorType')
-            .where('tumorType.systemAffected LIKE :system', { system: `%${system}%` })
+            .where('tumorType.system_affected LIKE :system', { system: `%${system}%` })
             .getMany();
+
+        if (tumorTypes.length === 0) {
+            throw new NotFoundException(
+                `No se encontraron tipos de tumor para el sistema: "${system}"`
+            );
+        }
 
         return tumorTypes.map((type) => this.mapToResponse(type));
     }
+
 
     /**
      * Actualiza un tipo de tumor

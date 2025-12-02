@@ -21,7 +21,7 @@ export class Patient {
     @Column({ type: 'enum', enum: ['Masculino', 'Femenino', 'Otro'], nullable: false })
     gender: string; // 'Masculino', 'Femenino', 'Otro'
 
-    @Column({ type: 'enum', enum: ['Activo', 'Seguimiento', 'Inactivo'], default: 'Activo' })
+        @Column({ type: 'enum', enum: ['Activo', 'Seguimiento', 'Inactivo'], default: 'Activo' })
     status: string; // 'Activo', 'Seguimiento', 'Inactivo'
 
     @OneToMany(() => ClinicalRecord, (record) => record.patient)

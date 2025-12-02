@@ -7,11 +7,11 @@ export class PatientDtoOut {
     @ApiProperty({ example: 1, description: 'ID único del paciente' })
     id: number;
 
-    // @ApiProperty({ example: 'María', description: 'Nombre del paciente' })
-    // firstName: string;
+     @ApiProperty({ example: 'María', description: 'Nombre del paciente' })
+     firstName: string;
 
-    // @ApiProperty({ example: 'González', description: 'Apellido del paciente' })
-    // lastName: string;
+     @ApiProperty({ example: 'González', description: 'Apellido del paciente' })
+     lastName: string;
 
     @ApiProperty({ example: '1985-03-15', description: 'Fecha de nacimiento' })
     birthDate: Date;
