@@ -21,12 +21,12 @@ public class PatientGatewayService {
 	}
 
 	public ResponseEntity<Object> getPatientList() {
-		String djangoUrl = "http://localhost:8000/genomic/patient/";
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients";
 		return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
 	}
 
 	public ResponseEntity<Object> getPatientById(Long id) {
-		String djangoUrl = "http://localhost:8000/genomic/patient/" + id;
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/" + id;
 		try {
 			return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
 		} catch (RestClientResponseException e) {
@@ -36,7 +36,7 @@ public class PatientGatewayService {
 
 	public ResponseEntity<Object> createPatient(PatientInDTO dto) {
 		String json;
-		String djangoUrl = "http://localhost:8000/genomic/patient/";
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/";
 		try {
 			json = objectMapper.writeValueAsString(dto);
 			HttpHeaders headers = new HttpHeaders();
@@ -53,7 +53,7 @@ public class PatientGatewayService {
 
 	public ResponseEntity<Object> updatePatient(PatientInDTO dto, Long id) {
 		String json;
-		String djangoUrl = "http://localhost:8000/genomic/patient/" + id + "/";
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/" + id + "/";
 		try {
 			json = objectMapper.writeValueAsString(dto);
 			HttpHeaders headers = new HttpHeaders();
@@ -69,7 +69,7 @@ public class PatientGatewayService {
 	}
 
 	public ResponseEntity<Object> deletePatient(Long id) {
-		String djangoUrl = "http://localhost:8000/genomic/patient/" + id + "/";
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/" + id + "/";
 		try {
 			return restTemplate.exchange(djangoUrl, HttpMethod.DELETE, null, Object.class);
 		} catch (RestClientResponseException e) {
@@ -79,12 +79,12 @@ public class PatientGatewayService {
 
 	public ResponseEntity<Object> searchPatientsByName(String name) {
 		String encoded = URLEncoder.encode(name == null ? "" : name, StandardCharsets.UTF_8);
-		String djangoUrl = "http://localhost:8000/genomic/patient/search?name=" + encoded;
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/search?name=" + encoded;
 		return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
 	}
 
 	public ResponseEntity<Object> findPatientsByStatus(String status) {
-		String djangoUrl = "http://localhost:8000/genomic/patient/status/" + status;
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/status/" + status;
 		try {
 			return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
 		} catch (RestClientResponseException e) {
@@ -93,7 +93,7 @@ public class PatientGatewayService {
 	}
 
 	public ResponseEntity<Object> deactivatePatient(Long id) {
-		String djangoUrl = "http://localhost:8000/genomic/patient/" + id + "/deactivate/";
+		String djangoUrl = "http://localhost:3000/genosentinel/clinica/patients/" + id + "/deactivate/";
 		try {
 			return restTemplate.exchange(djangoUrl, HttpMethod.PATCH, null, Object.class);
 		} catch (RestClientResponseException e) {

@@ -23,10 +23,12 @@ public class ClinicalRecordGatewayService {
      */
     public ResponseEntity<Object> getClinicalRecordList() {
         String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records";
-
         // RestTemplate recibe el JSON de NestJS y lo deserializa a un objeto Java
         // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
-        return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
+        try { return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class); }
+        catch (RestClientResponseException e)
+        {
+            return ResponseEntity.status(e.getStatusCode()).body(e.getResponseBodyAsString()); }
     }
 
     /**
