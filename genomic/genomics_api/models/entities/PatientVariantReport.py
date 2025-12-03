@@ -9,4 +9,4 @@ class PatientVariantReport(models.Model):
 
     class Meta:
         managed = False
-        db_table = 'patientvariantreport'
+        db_table = 'genomics_api_gene_patientvariantreport'

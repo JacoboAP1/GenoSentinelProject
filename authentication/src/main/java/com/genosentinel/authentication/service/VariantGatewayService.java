@@ -20,7 +20,7 @@ public class VariantGatewayService {
     }
 
     public ResponseEntity<Object> getVariantList() {
-        String djangoUrl = "http://localhost:8000/genomic/variants/";
+        String djangoUrl = "http://genomic-service:8000/genomic/variants/";
 
         // RestTemplate recibe el JSON de Django y lo deserializa a un objeto Java
         // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
@@ -29,7 +29,7 @@ public class VariantGatewayService {
     }
 
     public ResponseEntity<Object> getVariantById(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/variants/" + id;
+        String djangoUrl = "http://genomic-service:8000/genomic/variants/" + id;
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
@@ -42,7 +42,7 @@ public class VariantGatewayService {
 
     public ResponseEntity<Object> createVariant(VariantInDTO dto) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/variants/";
+        String djangoUrl = "http://genomic-service:8000/genomic/variants/";
 
         try {
             // serializando InDTO a json para que Django capte los campos
@@ -73,7 +73,7 @@ public class VariantGatewayService {
 
     public ResponseEntity<Object> updateVariant(VariantInDTO dto, Long id) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/variants/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/variants/" + id + "/";
 
         try {
             json = objectMapper.writeValueAsString(dto);
@@ -95,7 +95,7 @@ public class VariantGatewayService {
     }
 
     public ResponseEntity<Object> deleteVariant(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/variants/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/variants/" + id + "/";
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.DELETE, null, Object.class);
