@@ -2,7 +2,7 @@ import requests
 
 class ClinicServiceClient:
 
-    BASE_URL = "http://localhost:3000/genosentinel/clinica"
+    BASE_URL = "http://clinic-service:3000/genosentinel/clinica"
 
     @staticmethod
     def get_patient_by_id(patient_id):

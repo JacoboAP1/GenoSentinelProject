@@ -8,5 +8,4 @@ class PatientVariantReport(models.Model):
     allele_frequency = models.DecimalField(max_digits=5, decimal_places=2, blank=True, null=True)
 
     class Meta:
-        managed = False
-        db_table = 'genomics_api_gene_patientvariantreport'
+        db_table = 'genomics_api_patientvariantreport'

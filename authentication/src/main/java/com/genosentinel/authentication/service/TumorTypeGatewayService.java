@@ -22,7 +22,7 @@ public class TumorTypeGatewayService {
      * Obtener todos los tipos de tumor
      */
     public ResponseEntity<Object> getTumorTypeList() {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types";
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types";
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
         } catch (RestClientResponseException e) {
@@ -34,7 +34,7 @@ public class TumorTypeGatewayService {
      * Obtener tipo de tumor por ID
      */
     public ResponseEntity<Object> getTumorTypeById(Long id) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types/" + id;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
@@ -49,7 +49,7 @@ public class TumorTypeGatewayService {
      * Buscar tipos de tumor por sistema afectado
      */
     public ResponseEntity<Object> searchTumorTypesBySystem(String system) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types/search?system=" + system;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types/search?system=" + system;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
@@ -64,7 +64,7 @@ public class TumorTypeGatewayService {
      */
     public ResponseEntity<Object> createTumorType(TumorTypeInDTO dto) {
         String json;
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types";
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types";
 
         try {
             // Serializando InDTO a json para que NestJS capte los campos
@@ -94,7 +94,7 @@ public class TumorTypeGatewayService {
      */
     public ResponseEntity<Object> updateTumorType(TumorTypeInDTO dto, Long id) {
         String json;
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types/" + id;
 
         try {
             json = objectMapper.writeValueAsString(dto);
@@ -119,7 +119,7 @@ public class TumorTypeGatewayService {
      * Eliminar un tipo de tumor
      */
     public ResponseEntity<Object> deleteTumorType(Long id) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/tumor-types/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/tumor-types/" + id;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.DELETE, null, Object.class);
