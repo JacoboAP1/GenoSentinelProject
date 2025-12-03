@@ -9,13 +9,13 @@ import { PatientsModule } from '../patients/patients.module';
 import { TumorTypesModule } from '../tumor-types/tumor-types.module';
 
 @Module({
-    imports: [
-        TypeOrmModule.forFeature([ClinicalRecord, Patient, TumorType]),
-        PatientsModule, // Importar el módulo de pacientes
-        TumorTypesModule, // Importar el módulo de tipos de tumor
-    ],
-    controllers: [ClinicalRecordsController],
-    providers: [ClinicalRecordsService],
-    exports: [ClinicalRecordsService],
+  imports: [
+    TypeOrmModule.forFeature([ClinicalRecord, Patient, TumorType]),
+    PatientsModule, // Importar el módulo de pacientes
+    TumorTypesModule, // Importar el módulo de tipos de tumor
+  ],
+  controllers: [ClinicalRecordsController],
+  providers: [ClinicalRecordsService],
+  exports: [ClinicalRecordsService],
 })
 export class ClinicalRecordsModule {}

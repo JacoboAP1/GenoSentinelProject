@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: clinic-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: clinic-service
+  template:
+    metadata:
+      labels:
+        app: clinic-service
+    spec:
+      containers:
+        - name: clinic-service
+          image: genosentinel-clinica:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: clinic-configmap
+          env:
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: clinic-secret
+                  key: DB_PASSWORD
