@@ -21,7 +21,7 @@ public class GeneGatewayService {
     }
 
     public ResponseEntity<Object> getGeneList() {
-        String djangoUrl = "http://localhost:8000/genomic/gene/";
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/";
 
         // RestTemplate recibe el JSON de Django y lo deserializa a un objeto Java
         // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
@@ -30,7 +30,7 @@ public class GeneGatewayService {
     }
 
     public ResponseEntity<Object> getGeneById(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/gene/" + id;
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/" + id;
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class);
@@ -43,7 +43,7 @@ public class GeneGatewayService {
 
     public ResponseEntity<Object> createGene(GeneInDTO dto) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/gene/";
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/";
 
         try {
             // serializando InDTO a json para que Django capte los campos
@@ -74,7 +74,7 @@ public class GeneGatewayService {
 
     public ResponseEntity<Object> updateGene(GeneInDTO dto, Long id) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/gene/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/" + id + "/";
 
         try {
             json = objectMapper.writeValueAsString(dto);
@@ -96,7 +96,7 @@ public class GeneGatewayService {
     }
 
     public ResponseEntity<Object> deleteGene(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/gene/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/gene/" + id + "/";
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.DELETE, null, Object.class);

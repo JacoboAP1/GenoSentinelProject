@@ -20,7 +20,7 @@ public class ReportGatewayService {
     }
 
     public ResponseEntity<Object> getReportList() {
-        String djangoUrl = "http://localhost:8000/genomic/reports/";
+        String djangoUrl = "http://genomic-service:8000/genomic/reports/";
 
         // RestTemplate recibe el JSON de Django y lo deserializa a un objeto Java
         // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
@@ -29,7 +29,7 @@ public class ReportGatewayService {
     }
 
     public ResponseEntity<Object> getReportById(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/reports/" + id;
+        String djangoUrl = "http://genomic-service:8000/genomic/reports/" + id;
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.GET, null, Object.class );
@@ -42,7 +42,7 @@ public class ReportGatewayService {
 
     public ResponseEntity<Object> createReport(ReportInDTO dto) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/reports/";
+        String djangoUrl = "http://genomic-service:8000/genomic/reports/";
 
         try {
             // serializando InDTO a json para que Django capte los campos
@@ -73,7 +73,7 @@ public class ReportGatewayService {
 
     public ResponseEntity<Object> updateReport(ReportInDTO dto, Long id) {
         String json;
-        String djangoUrl = "http://localhost:8000/genomic/reports/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/reports/" + id + "/";
 
         try {
             json = objectMapper.writeValueAsString(dto);
@@ -95,7 +95,7 @@ public class ReportGatewayService {
     }
 
     public ResponseEntity<Object> deleteReport(Long id) {
-        String djangoUrl = "http://localhost:8000/genomic/reports/" + id + "/";
+        String djangoUrl = "http://genomic-service:8000/genomic/reports/" + id + "/";
 
         try {
             return restTemplate.exchange(djangoUrl, HttpMethod.DELETE, null, Object.class);

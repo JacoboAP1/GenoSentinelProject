@@ -7,4 +7,4 @@ class Gene(models.Model):
 
     class Meta:
         managed = False # No se migran las tablas en la base de datos, se usan las existentes
-        db_table = 'gene'
+        db_table = 'genomics_api_gene'
