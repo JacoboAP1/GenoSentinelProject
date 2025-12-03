@@ -18,10 +18,10 @@ import { ClinicalRecordsModule } from './clinical-records/clinical-records.modul
       host: process.env.DB_HOST || 'localhost',
       port: parseInt(process.env.DB_PORT) || 3306,
       username: process.env.DB_USERNAME || 'root',
-      password: process.env.DB_PASSWORD || '12345678',
+      password: process.env.DB_PASSWORD || 'admin123',
       database: process.env.DB_DATABASE || 'genosentinel',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: false, // Solo en desarrollo - en producción usar migraciones
+      synchronize: true, // Solo en desarrollo - en producción usar migraciones
       logging: false,
     }),
 

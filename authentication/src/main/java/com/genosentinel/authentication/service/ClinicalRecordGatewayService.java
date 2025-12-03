@@ -22,7 +22,7 @@ public class ClinicalRecordGatewayService {
      * Obtener todas las historias clínicas
      */
     public ResponseEntity<Object> getClinicalRecordList() {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records";
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records";
         // RestTemplate recibe el JSON de NestJS y lo deserializa a un objeto Java
         // Spring Boot volverá a serializar ese objeto a JSON al enviarlo al cliente
         try { return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class); }
@@ -35,7 +35,7 @@ public class ClinicalRecordGatewayService {
      * Obtener historia clínica por ID
      */
     public ResponseEntity<Object> getClinicalRecordById(String id) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records/" + id;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
@@ -50,7 +50,7 @@ public class ClinicalRecordGatewayService {
      * Obtener historias clínicas por paciente
      */
     public ResponseEntity<Object> getClinicalRecordsByPatient(String patientId) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records/patient/" + patientId;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records/patient/" + patientId;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
@@ -64,7 +64,7 @@ public class ClinicalRecordGatewayService {
      * Obtener historias clínicas por tipo de tumor
      */
     public ResponseEntity<Object> getClinicalRecordsByTumorType(Long tumorTypeId) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records/tumor-type/" + tumorTypeId;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records/tumor-type/" + tumorTypeId;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.GET, null, Object.class);
@@ -79,7 +79,7 @@ public class ClinicalRecordGatewayService {
      */
     public ResponseEntity<Object> createClinicalRecord(ClinicalRecordInDTO dto) {
         String json;
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records";
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records";
 
         try {
             // Serializando InDTO a json para que NestJS capte los campos
@@ -109,7 +109,7 @@ public class ClinicalRecordGatewayService {
      */
     public ResponseEntity<Object> updateClinicalRecord(ClinicalRecordInDTO dto, String id) {
         String json;
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records/" + id;
 
         try {
             json = objectMapper.writeValueAsString(dto);
@@ -134,7 +134,7 @@ public class ClinicalRecordGatewayService {
      * Eliminar una historia clínica
      */
     public ResponseEntity<Object> deleteClinicalRecord(String id) {
-        String nestUrl = "http://localhost:3000/genosentinel/clinica/clinical-records/" + id;
+        String nestUrl = "http://clinic-service:3000/genosentinel/clinica/clinical-records/" + id;
 
         try {
             return restTemplate.exchange(nestUrl, HttpMethod.DELETE, null, Object.class);

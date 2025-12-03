@@ -14,5 +14,4 @@ class GeneticVariant(models.Model):
     impact = models.CharField(max_length=20, blank=True, null=True)
 
     class Meta:
-        managed = False
         db_table = 'genomics_api_geneticvariant'

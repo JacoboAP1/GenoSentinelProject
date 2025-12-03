@@ -37,4 +37,4 @@ ENV PORT=3000
 
 #usa node como puerto de ejecuccion
 USER node
-CMD ["node", "dist/src/main.js"]
+CMD ["node", "dist/main.js"]

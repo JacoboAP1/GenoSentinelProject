@@ -6,5 +6,4 @@ class Gene(models.Model):
     function_summary = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = False # No se migran las tablas en la base de datos, se usan las existentes
         db_table = 'genomics_api_gene'
